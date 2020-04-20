@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'heroku_5abb989acb9536e',
-        'USER' : 'b3b904e2b6a5bd',
-        'PASSWORD' : 'c89c04f9',
-        'HOST' : 'us-cdbr-iron-east-01.cleardb.net'
+        'NAME': 'heroku_5abb989acb9536e',
+        'USER': 'b3b904e2b6a5bd',
+        'PASSWORD': 'c89c04f9',
+        'HOST': 'us-cdbr-iron-east-01.cleardb.net'
     }
 }
 
@@ -126,3 +126,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
