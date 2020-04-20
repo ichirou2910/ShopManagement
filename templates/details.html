@@ -8,9 +8,9 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="{% static 'index.css' %}">
+        <link rel="stylesheet" href="details.css">
 
-        <title>Main Page</title>
+        <title></title>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,19 +21,19 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="products/">Products</a>
+                    <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/products">Products</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="accounts/register">Register</a>
-                    <a class="dropdown-item" href="accounts/login">Login</a>
+                    <a class="dropdown-item" href="/accounts/register">Register</a>
+                    <a class="dropdown-item" href="/accounts/login">Login</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something wrong?</a>
                     </div>
@@ -42,15 +42,16 @@
             </div>
         </nav>
 
-        <div class="jumbotron">
-            <h1 class="display-4 text-white">Welcome to shop</h1>
-            <p class="lead text-white">Enjoy shopping!</p>
-            <hr class="my-4 text-info">
-            <p class="text-white">Well basically that&apos;s it.</p>
-            <a class="btn btn-primary btn-lg" href="products" role="button">Let's go! >>></a>
-        </div>
+        <h1>Name: {{product.product_name}}</h1>
+        {% if product.product_image %}
+        <img class="img-thumbnail" src="{{product.product_image}}" alt="">
+        {% else %}
+        <img class="img-thumbnail" src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" alt="">
+        {% endif %}
 
-
+        <p>From: {{product.company}}</p>
+        <p>Price: {{product.sell_price}}</p>
+        <p>{{product.quantity_in_stock}} in stock</p>
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
