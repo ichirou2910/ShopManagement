@@ -11,7 +11,7 @@ from django.db import models
 class Product(models.Model):
     product_id = models.CharField(db_column='productID', primary_key=True, max_length=10)  # Field name made lowercase.
     product_name = models.CharField(db_column='productName', max_length=25)  # Field name made lowercase.
-    product_image = models.CharField(db_column='productImage', max_length=100)  # Field name made lowercase.
+    product_image = models.CharField(db_column='productImage', max_length=100, blank=True)  # Field name made lowercase.
     company = models.CharField(max_length=25)
     product_description = models.TextField(db_column='productDescription')  # Field name made lowercase.
     quantity_in_stock = models.SmallIntegerField(db_column='quantityInStock')  # Field name made lowercase.
