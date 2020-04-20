@@ -45,74 +45,20 @@
         <section id="products_list">
             <div class="container-fluid mt-5">
                 <div class="row justify-content-center my-5">
+                    {% for product in products %}
                     <div class="col-lg-4 col-md-6 col-xs-1">
                         <div class="card">
                             <img src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <h5 class="card-title">{{product.productname}}</h5>
+                                <p class="card-text">{{product.productdescription}}</p>
+                                <p class="card-text">Price: {{product.sellprice}}</p>
                                 <a href="#" class="btn border-primary">View details</a>
                                 <a href="#" class="btn border-danger">Add to card</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-xs-1">
-                        <div class="card">
-                            <img src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn border-primary">View details</a>
-                                <a href="#" class="btn border-danger">Add to card</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-xs-1">
-                        <div class="card">
-                            <img src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn border-primary">View details</a>
-                                <a href="#" class="btn border-danger">Add to card</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row justify-content-center my-5">
-                    <div class="col-lg-4 col-md-6 col-xs-1">
-                        <div class="card">
-                            <img src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn border-primary">View details</a>
-                                <a href="#" class="btn border-danger">Add to card</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-xs-1">
-                        <div class="card">
-                            <img src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn border-primary">View details</a>
-                                <a href="#" class="btn border-danger">Add to card</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-xs-1">
-                        <div class="card">
-                            <img src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn border-primary">View details</a>
-                                <a href="#" class="btn border-danger">Add to card</a>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
