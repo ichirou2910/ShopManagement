@@ -1,6 +1,5 @@
 *.pyc
 *.pyo
-.pylintrc
 __pycache__/
 *.so
 *.log
