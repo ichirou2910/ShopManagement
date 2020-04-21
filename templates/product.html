@@ -8,12 +8,12 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="{% static 'css/product.css' %}">
+        <link rel="stylesheet" href="{% static 'product.css' %}">
 
         <title>Products</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <a class="navbar-brand" href="#">Shop</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="/products">Products</a>
@@ -43,18 +43,28 @@
         </nav>
 
         <section id="products_list">
-            <div class="container-fluid mt-5">
+            <div class="container-fluid mt-5 pt-3">
                 <div class="row justify-content-center my-5">
                     {% for product in products %}
-                    <div class="col-lg-4 col-md-6 col-xs-1">
+                    <div class="col-lg-3 col-md-6 col-sm-12 my-3">
                         <div class="card">
-                            <img src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" class="card-img-top" alt="...">
+                        {# Use default image if product image not provided #}
+                        {% if product.product_image %}
+                            <img src="{{ product.product_image }}" class="img-thumbnail card-img-top" alt="...">
+                        {% else %}
+                            <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail card-img-top" alt="...">
+                        {% endif %}
                             <div class="card-body">
-                                <h5 class="card-title">{{product.productname}}</h5>
-                                <p class="card-text">{{product.productdescription}}</p>
-                                <p class="card-text">Price: {{product.sellprice}}</p>
-                                <a href="#" class="btn border-primary">View details</a>
-                                <a href="#" class="btn border-danger">Add to card</a>
+                                <h5 class="card-title font-weight-bold">{{product.product_name}}</h5>
+                                <p class="card-text">{{product.product_description}}</p>
+                                <p class="card-text">Price: {{product.sell_price}}</p>
+                                <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">View details</a>
+                            {# If there isn't any left, display Sold Out rather than Add to cart #}
+                            {% if product.quantity_in_stock %}
+                                <a href="#" class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></a>
+                            {% else %}
+                                <a class="btn btn-secondary disabled" href="#" aria-disabled="true">Sold out</a>
+                            {% endif %}
                             </div>
                         </div>
                     </div>
@@ -64,6 +74,7 @@
         </section>
 
         <!-- Optional JavaScript -->
+        <script src="https://kit.fontawesome.com/9439a40bb1.js" crossorigin="anonymous"></script>
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
