@@ -20,3 +20,15 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'products'
+
+class Cart(models.Model):
+    ord = models.AutoField(db_column='ord', primary_key=True)
+    product_id = models.CharField(db_column='productID', max_length=10)
+    product_name = models.CharField(db_column='productName', max_length=25)
+    product_image = models.CharField(db_column='productImage', max_length=100, blank=True)
+    quantity = models.SmallIntegerField(db_column='quantity')
+    price = models.IntegerField(db_column='sellPrice')
+    user_id = models.CharField(db_column='userID', max_length=10)
+
+    class Meta:
+        db_table = 'cart'

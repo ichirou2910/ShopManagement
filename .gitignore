@@ -7,3 +7,5 @@ __pycache__/
 mainpage/__pycache__
 shop/__pycache__
 mainpage/migrations/__pycache__
+products/__pycache__
+products/migrations/__pycache__
