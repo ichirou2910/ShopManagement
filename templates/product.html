@@ -28,15 +28,21 @@
                     <a class="nav-link" href="/products">Products</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Account
-                    </a>
+
+                    {% if user.is_authenticated %}
+                        <li class="navbar-brand">Hello {{user.username}}</li>
+                        <li class="navbar-brand"><a href="accounts/logout">Logout</a></li>
+                    {% else %}
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Account
+                        </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="/accounts/register">Register</a>
                     <a class="dropdown-item" href="/accounts/login">Login</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something wrong?</a>
                     </div>
+                    {% endif %}
                 </li>
                 </ul>
             </div>
@@ -54,18 +60,22 @@
                         {% else %}
                             <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail card-img-top" alt="...">
                         {% endif %}
-                            <div class="card-body">
+                            <form class="card-body" method="GET">
                                 <h5 class="card-title font-weight-bold">{{product.product_name}}</h5>
                                 <p class="card-text">{{product.product_description}}</p>
                                 <p class="card-text">Price: {{product.sell_price}}</p>
                                 <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">View details</a>
                             {# If there isn't any left, display Sold Out rather than Add to cart #}
                             {% if product.quantity_in_stock %}
-                                <a href="/products/inform/{{product.product_id}}" class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></a>
+                                {% if user.is_authenticated %}
+                                    <a href="/products/{{product.product_id}}" class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></a>
+                                {% else %}
+                                    <a href="#" class="btn btn-danger">Login to add <i class="fas fa-cart-plus"></i></a>
+                                {% endif %}
                             {% else %}
                                 <a class="btn btn-secondary disabled" href="#" aria-disabled="true">Sold out</a>
                             {% endif %}
-                            </div>
+                            </form>
                         </div>
                     </div>
                     {% endfor %}
