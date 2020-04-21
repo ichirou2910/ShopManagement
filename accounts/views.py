@@ -20,7 +20,7 @@ def register(request):
 		return redirect('register')
 	    else:
 	    	user = User.objects.create_user(username = username, email = email, password = password, password2 = password2)
-	    	user.save();
+	    	user.save()
 	    	print('User created')
 		return redirect('login')
 	else:
