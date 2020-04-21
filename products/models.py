@@ -28,7 +28,7 @@ class Cart(models.Model):
     product_image = models.CharField(db_column='productImage', max_length=100, blank=True)
     quantity = models.SmallIntegerField(db_column='quantity')
     price = models.IntegerField(db_column='sellPrice')
-    user_id = models.CharField(db_column='userID', max_length=10)
+    user = models.CharField(db_column='user', max_length=25)
 
     class Meta:
         db_table = 'cart'
