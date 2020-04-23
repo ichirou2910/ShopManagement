@@ -20,15 +20,20 @@
                         {% else %}
                             <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail card-img-top" alt="...">
                         {% endif %}
-                            <form class="card-body" method="GET">
+                            <form class="card-body" method="POST" action="{{product.product_id}}/">
+
+                                {% csrf_token %}
+
                                 <h5 class="card-title font-weight-bold">{{product.product_name}}</h5>
                                 <p class="card-text">{{product.product_description}}</p>
                                 <p class="card-text">Price: {{product.sell_price}}</p>
                                 <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">View details</a>
+                                <label class="card-text">Quantity</label>
+                                <input type="number" name="quantity">
                             {# If there isn't any left, display Sold Out rather than Add to cart #}
                             {% if product.quantity_in_stock %}
                                 {% if user.is_authenticated %}
-                                    <a href="/products/{{product.product_id}}" class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></a>
+                                    <button class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></button>
                                 {% else %}
                                     <a href="#" class="btn btn-danger">Login to add <i class="fas fa-cart-plus"></i></a>
                                 {% endif %}
