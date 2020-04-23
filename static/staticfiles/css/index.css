@@ -1,11 +1,13 @@
 body {
-    background: url('https://vignette.wikia.nocookie.net/sdorica/images/8/89/(Shall_We_Dance)_Sione_SP.png');
+    background: url('https://vignette.wikia.nocookie.net/sdorica/images/8/89/(Shall_We_Dance)_Sione_SP.png') fixed;
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .jumbotron {
-    background: none;
+    /* background: none; */
+    background-color: rgba(0, 0, 0, 0.5)
 }
 
 .jumbotron hr {

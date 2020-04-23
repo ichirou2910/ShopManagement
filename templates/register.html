@@ -1,6 +1,8 @@
 {% extends 'base/template.html' %}
 {% load static %}
 
+{% block title %}Register{% endblock %}
+
 {% block head %}
 {% endblock %}
 
@@ -40,7 +42,6 @@
             {% if messages %}
             <div class="row justify-content-center mt-5">
                 <div class="col-12 col-md-6 p-3 border rounded-lg bg-danger">
-                    {# <p class="text-light"><i class="fas fa-info-circle"></i> message</p> #}
                     {% for message in messages %}
                         <p class="text-light"><i class="fas fa-info-circle"></i> {{message}}</p>
                     {% endfor %}
