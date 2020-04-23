@@ -31,10 +31,10 @@
                         Hello, <span class="text-info">{{user.username}}</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item text-danger" href="/accounts/logout"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
+                        <a class="dropdown-item text-danger" href="/accounts/logout?next={{request.path}}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
                     <a class="dropdown-item" href="#"><i class="fas fa-shopping-cart fa-fw"></i> View your cart</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something wrong?</a>
+                    <!-- <div class="dropdown-divider"></div> -->
+                    <!-- <a class="dropdown-item" href="#">Something wrong?</a> -->
                     </div>
                 </li>
                 {% else %}
@@ -43,8 +43,8 @@
                     Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item text-primary" href="/accounts/register"><i class="fas fa-user-plus fa-fw"></i> Register</a>
-                    <a class="dropdown-item text-info" href="/accounts/login"><i class="fas fa-sign-in-alt fa-fw"></i> Login</a>
+                    <a class="dropdown-item text-primary" href="/accounts/register?next={{request.path}}"><i class="fas fa-user-plus fa-fw"></i> Register</a>
+                    <a class="dropdown-item text-info" href="/accounts/login?next={{request.path}}"><i class="fas fa-sign-in-alt fa-fw"></i> Login</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something wrong?</a>
                     </div>
