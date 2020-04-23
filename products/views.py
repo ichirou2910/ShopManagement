@@ -19,6 +19,9 @@ def product_details(request, pid):
 
 def product_cart(request, pid):
 
+    storage = messages.get_messages(request)
+    storage.used = True
+
     if request.method == 'POST':
         quantity = request.POST['quantity']
     else:
@@ -39,8 +42,9 @@ def product_cart(request, pid):
         messages.add_message(request, messages.INFO, 'You have added a product to your cart!')
         product_in = Cart(product_id=product_id, product_name=product_name, quantity=quantity, price=price, user=user)
         product_in.save()
-    
-    messages.add_message(request, messages.INFO, 'Oops!')
+    else:
+        messages.add_message(request, messages.INFO, 'Oops!')
+
     return redirect('/products')
 
 
