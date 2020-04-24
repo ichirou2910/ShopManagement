@@ -40,15 +40,15 @@
                             {% endif %}
                             </div>
                         </div>
-                        </div>
+                    </div>
                         
-                        <div id="popover-content" style="display: none;">
-                            <form method="POST" action="/products/{{product.product_id}}/">
-                                {% csrf_token %}
-                                <input type='number' class="border-danger" name='quantity' style="width: 65px;" required>
-                                <button class="btn btn-info">Add</button>
-                            </form>
-                        </div>
+                    <div id="popover-content" style="display: none;">
+                        <form method="POST" action="/products/{{product.product_id}}/">
+                            {% csrf_token %}
+                            <input type='number' class="border-danger" name='quantity' style="width: 65px;" required>
+                            <button class="btn btn-info">Add</button>
+                        </form>
+                    </div>
                     {% endfor %}
                 </div>
             </div>
