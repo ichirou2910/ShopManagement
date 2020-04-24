@@ -8,14 +8,23 @@
 {% endblock %}
 
 {% block content %}
-        <h1>Name: {{product.product_name}}</h1>
-        {% if product.product_image %}
-        <img class="img-thumbnail" src="{{product.product_image}}" alt="">
-        {% else %}
-        <img class="img-thumbnail" src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" alt="">
-        {% endif %}
-
-        <p>From: {{product.company}}</p>
-        <p>Price: {{product.sell_price}}</p>
-        <p>{{product.quantity_in_stock}} in stock</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg">
+                {% if product.product_image %}
+                <img class="img-thumbnail" src="{{product.product_image}}" alt="">
+                {% else %}
+                <img class="img-thumbnail" src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" alt="">
+                {% endif %}
+            </div>
+            <div class="col-md">
+                <h1>{{product.product_name}}</h1>
+                <p>From: {{product.company}}</p>
+                <p>Price: {{product.sell_price}}</p>
+                <p>{{product.quantity_in_stock}} in stock</p>
+                <button type="button" class="btn btn-danger">Add to my cart</button>
+                <p>{{product.description}}</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

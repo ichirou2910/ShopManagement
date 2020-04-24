@@ -6,8 +6,10 @@
 {% block head_extend %}
         <link rel="stylesheet" href="{% static 'css/product.css' %}">
 {% endblock %}
-
-    {% block content %}
+{% block content %}
+    {% if product in cart == 0 %}
+        <p>You don't have any items on your cart yet.<a href="product/"> Start shopping now!</a></p>
+    {% else %}
         <section id="products_list">
             <div class="container-fluid mt-5 pt-3">
                 <div class="row justify-content-center my-5">
@@ -33,6 +35,5 @@
                 </div>
             </div>
         </section>
-    {% endblock %}
-    </body>
-</html>
+    {% endif %}
+{% endblock %}
