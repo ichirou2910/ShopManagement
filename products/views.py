@@ -49,7 +49,6 @@ def product_cart(request, pid):
 
     return redirect('/products')
 
-
 def cart_get(request):
     cart = Cart.objects.all()
     return render(request, 'cart.html', {'cart': cart})

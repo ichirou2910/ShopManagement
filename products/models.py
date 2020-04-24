@@ -14,7 +14,7 @@ class Product(models.Model):
     product_image = models.CharField(db_column='productImage', max_length=100, blank=True)  # Field name made lowercase.
     company = models.CharField(max_length=25)
     product_description = models.TextField(db_column='productDescription')  # Field name made lowercase.
-    quantity_in_stock = models.SmallIntegerField(db_column='quantityInStock')  # Field name made lowercase.
+    quantity_in_stock = models.IntegerField(db_column='quantityInStock')  # Field name made lowercase.
     sell_price = models.IntegerField(db_column='sellPrice')  # Field name made lowercase.
     buy_price = models.IntegerField(db_column='buyPrice')  # Field name made lowercase.
 
@@ -26,7 +26,7 @@ class Cart(models.Model):
     product_id = models.CharField(db_column='productID', max_length=10)
     product_name = models.CharField(db_column='productName', max_length=25)
     product_image = models.CharField(db_column='productImage', max_length=100, blank=True)
-    quantity = models.SmallIntegerField(db_column='quantity')
+    quantity = models.IntegerField(db_column='quantity')
     price = models.IntegerField(db_column='sellPrice')
     user = models.CharField(db_column='user', max_length=25)
 
