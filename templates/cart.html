@@ -1,38 +1,71 @@
 {% extends 'base/navbar.html' %}
 {% load static %}
+{% load mathfilters %}
 
 {% block title_extend %}Shop - Cart{% endblock %}
 
 {% block head_extend %}
-        <link rel="stylesheet" href="{% static 'css/product.css' %}">
+        <link rel="stylesheet" href="{% static 'css/cart.css' %}">
 {% endblock %}
 
-    {% block content %}
-        <section id="products_list">
-            <div class="container-fluid mt-5 pt-3">
+{% block content %}
+        <div class="container-fluid mt-5 pt-3">
+            <section id="header">
+                <h1 class="text-light pl-5">Cart <i class="fas fa-shopping-cart"></i></h1>
+                <hr class="my-4 border-light">
+            </section>
+
+            <section id="products_list">
                 <div class="row justify-content-center my-5">
-                    {% for product in cart %}
-                        {% if product.user == user.username %}
-                            <div class="col-lg-3 col-md-6 col-sm-12 my-3">
-                                <div class="card">
-                                {# Use default image if product image not provided #}
-                                {% if product.product_image %}
-                                    <img src="{{ product.product_image }}" class="img-thumbnail card-img-top" alt="...">
-                                {% else %}
-                                    <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail card-img-top" alt="...">
-                                {% endif %}
-                                    <div class="card-body">
-                                        <h5 class="card-title font-weight-bold">{{product.product_name}}</h5>
-                                        <p class="card-text">Price: {{product.price}}</p>
-                                        <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">View details</a>
+                    <div class="col-md-8 col-12">
+                        <form class="cart" action="">
+                            {% for product in cart %}
+                                <div class="row cart-item my-1 p-2 rounded rounded-lg">
+                                    <!-- Product image row -->
+                                    <div class="col-md-2 col-12 text-center">
+                                        {# Use default image if product image not provided #}
+                                        {% if product.product_image %}
+                                            <img src="{{ product.product_image }}" class="img-thumbnail img-responsive" alt="...">
+                                        {% else %}
+                                            <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail img-responsive" alt="...">
+                                        {% endif %}
+                                    </div>
+                                    <!-- ID row -->
+                                    <div class="col-1">
+                                        <p>#{{product.product_id}}</p>
+                                    </div>
+
+                                    <!-- Product info row -->
+                                    <div class="col-md-9 col-11">
+                                        <div class="row">
+                                            <div class="col-md-7 col-6 pd-info">
+                                                <p class="font-weight-bold">{{product.product_name}}</p>
+                                                <p>Price each: <span class="text-info">{{product.price}}</span></p>
+                                                <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
+                                                <button class="btn btn-danger">Delete <i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                            <!-- Quantity & Price -->
+                                            <div class="col-md-5 col-6 pd-price">
+                                                <p>Quantity: <span class="text-primary font-weight-bold">{{product.quantity}}</span></p>
+                                                <p>Total: <span class="text-info font-weight-bold">{{product.quantity|mul:product.price}}</span></p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            {% endfor %}
+                        </form>
+                    </div>
+                    <div class="col-md-3 ml-md-2 col-12 cart-price rounded rounded-lg">
+                        <div class="col-12 card">
+                            <div class="card-body">
+                                <h5 class="card-title font-weight-bold h4">Summary:</h5>
+                                <hr class="my-4">
+                                <p class="card-text text-right">Total Price: <span class="text-danger h3">{{total}}</span></p>
+                                <a href="#" class="btn btn-info">Checkout <i class="fas fa-cash-register"></i></a>
                             </div>
-                        {% endif %}
-                    {% endfor %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
-    {% endblock %}
-    </body>
-</html>
+            </section>
+        </div>
+{% endblock %}

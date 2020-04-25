@@ -21,6 +21,7 @@ class Product(models.Model):
     class Meta:
         db_table = 'products'
 
+
 class Cart(models.Model):
     ord = models.AutoField(db_column='ord', primary_key=True)
     product_id = models.CharField(db_column='productID', max_length=10)
