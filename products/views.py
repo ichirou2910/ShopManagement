@@ -51,5 +51,5 @@ def product_cart(request, pid):
     return redirect('/products')
 
 def cart_get(request):
-    cart = Cart.objects.filter(user = request.user.username).values('product_name', 'product_image', 'price', 'user').annotate(Sum('quantity'))
+    cart = Cart.objects.filter(user = request.user.username).values('product_name', 'product_image', 'price', 'user').annotate(quantity = Sum('quantity'))
     return render(request, 'cart.html', {'cart': cart})
