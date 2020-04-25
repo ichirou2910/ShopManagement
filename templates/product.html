@@ -25,7 +25,7 @@
 
                                 <h5 class="card-title font-weight-bold">{{product.product_name}}</h5>
                                 <p class="card-text">{{product.product_description}}</p>
-                                <p class="card-text">Price: {{product.sell_price}}</p>
+                                <p class="card-text">Price: <span class="text-info">{{product.sell_price}}</span></p>
                                 <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">View <i class="fas fa-info-circle"></i></a>
                             {# If there isn't any left, display Sold Out rather than Add to cart #}
                             {% if product.quantity_in_stock %}
