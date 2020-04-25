@@ -4,18 +4,53 @@
 {% block title_extend %}{{product.product_name}} - Shop{% endblock %}
 
 {% block head_extend %}
-    <link rel="stylesheet" href="{% static 'css/details.css' %}">
+        <link rel="stylesheet" href="{% static 'css/details.css' %}">
 {% endblock %}
 
 {% block content %}
-        <h1>Name: {{product.product_name}}</h1>
-        {% if product.product_image %}
-        <img class="img-thumbnail" src="{{product.product_image}}" alt="">
-        {% else %}
-        <img class="img-thumbnail" src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" alt="">
-        {% endif %}
-
-        <p>From: {{product.company}}</p>
-        <p>Price: {{product.sell_price}}</p>
-        <p>{{product.quantity_in_stock}} in stock</p>
+        <div class="container mt-5">
+            <section id="header">
+                <h1 class="text-light pl-5">Product Info <i class="fas fa-shopping-cart"></i></h1>
+                <hr class="my-4 border-light">
+            </section>
+            
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    {% if product.product_image %}
+                    <img class="img-thumbnail" src="{{product.product_image}}" alt="">
+                    {% else %}
+                    <img class="img-thumbnail" src="https://vignette.wikia.nocookie.net/sdorica/images/f/f5/CH_Puggi.png" alt="">
+                    {% endif %}
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card pd-info">
+                        <div class="card-body">
+                            <h1 class="card-title font-weight-bold">{{product.product_name}}</h5>
+                            <p class="card-text">From: {{product.company}}</p>
+                            <p class="card-text">Price: {{product.sell_price}}</p>
+                            <p class="card-text">{{product.quantity_in_stock}} in stock</p>
+                            {# If there isn't any left, display Sold Out rather than Add to cart #}
+                            {% if product.quantity_in_stock %}
+                                {% if user.is_authenticated %}
+                                    <button type="button" class="btn btn-danger" data-containter="body" data-toggle="popover" data-placement="top" data-html="true" data-title="Amount:"
+                                        data-content='<div id="popover-content">
+                                            <form method="POST" action="/products/{{product.product_id}}/">
+                                                {% csrf_token %}
+                                                <input type="number" class="border-danger" name="quantity" style="width: 65px;" required>
+                                                <button class="btn btn-info">Add</button>
+                                            </form>
+                                        </div>'>
+                                        Add to cart <i class="fas fa-cart-plus"></i></button>
+                                {% else %}
+                                    <a href="/accounts/login?next={{request.path}}" class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></a>
+                                {% endif %}
+                            {% else %}
+                                <a class="btn btn-secondary disabled" href="#" aria-disabled="true">Sold out</a>
+                            {% endif %}
+                            <p class="card-text">{{product.description}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 {% endblock %}

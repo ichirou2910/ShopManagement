@@ -1,5 +1,5 @@
 body {
-    background: url('https://scontent.fhan2-1.fna.fbcdn.net/v/t1.0-9/93702750_3274350239276118_225799358602280960_o.jpg?_nc_cat=101&_nc_sid=8024bb&_nc_ohc=65vX8tvVMesAX9gEhF4&_nc_ht=scontent.fhan2-1.fna&oh=3fd927de724a135f3dc8caa02916a144&oe=5EC1D9F5');
+    background: url("../images/products_bg.jpg");
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -9,8 +9,16 @@ body {
     width: 100%;
 }
 
+.pd-info {
+    background-color: rgba(255, 255, 255, 0.7)
+}
+
 .card-img-top {
     object-fit: cover;
     object-position: center;
     height: 250px;
+}
+
+a:hover {
+    color: blue;
 }
