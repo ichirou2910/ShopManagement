@@ -6,5 +6,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('cart/', views.cart_get, name='cart_get'),
     path('viewproduct/<str:pid>/', views.product_details, name='details'),
+    path('checkout/', views.checkout, name='checkout'),
+    # Fk that, stay here!
     path('<str:pid>/', views.product_cart, name='cart'),
 ]

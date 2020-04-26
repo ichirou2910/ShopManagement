@@ -33,3 +33,27 @@ class Cart(models.Model):
 
     class Meta:
         db_table = 'cart'
+
+
+class OrderDJ(models.Model):
+    order_id = models.AutoField(db_column='orderID', primary_key=True)
+    user = models.CharField(db_column='user', max_length=25)
+    shipped = models.BooleanField(db_column='shipped', default=False)
+
+    class Meta:
+        db_table = 'orderDJ'
+
+
+class OrderDetailsDJ(models.Model):
+    order_id = models.IntegerField(db_column='orderID')
+    product_id = models.CharField(db_column='productID', max_length=10)
+    user = models.CharField(db_column='user', max_length=25)
+    customer_name = models.CharField(db_column='customerName', default='noname', max_length=25)
+    address = models.CharField(db_column='address', default='nonexistent', max_length=100)
+    product_name = models.CharField(db_column='productName', max_length=25)
+    quantity = models.IntegerField(db_column='quantity')
+    price = models.IntegerField(db_column='sellPrice')
+
+    class Meta:
+        unique_together = (('order_id', 'product_id'),)
+        db_table = 'orderDetailsDJ'

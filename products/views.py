@@ -3,8 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Sum
 # from django.contrib.auth.models import User
-from .models import Product
-from .models import Cart
+from .models import Product, Cart, OrderDJ, OrderDetailsDJ
 
 # Create your views here.
 
@@ -69,3 +68,39 @@ def cart_get(request):
     for cart_data in cart:
         total_price += cart_data.get('price') * cart_data.get('quantity')
     return render(request, 'cart.html', {'cart': cart, 'total': total_price})
+
+
+def checkout(request):
+    cart = Cart.objects.filter(user=request.user.username).values('product_id', 'product_name', 'product_image', 'price', 'user').annotate(quantity=Sum('quantity'))
+    products = Product.objects.all()
+    total_price = 0
+    for cart_data in cart:
+        total_price += cart_data.get('price') * cart_data.get('quantity')
+
+    if request.method == 'POST':
+        name = request.POST['name']
+        address = request.POST['address']
+    else:
+        name = ''
+        address = ''
+
+    if name and address:
+        order = OrderDJ(user=request.user.username)
+        order.save()
+
+        for item in cart:
+            print(item)
+            # Add to order table
+            order_detail = OrderDetailsDJ(order_id=order.order_id, product_id=item.get('product_id'), user=item.get('user'), customer_name=name, address=address, quantity=item.get('quantity'), price=item.get('price'))
+            order_detail.save()
+            # Decrease quantity in stock
+            product = products.get(product_id=item.get('product_id'))
+            stock_left = product.quantity_in_stock - item.get('quantity')
+            product.quantity_in_stock = stock_left
+            product.save(update_fields=['quantity_in_stock'])
+
+        messages.add_message(request, messages.INFO, 'Order accepted! Wait for your delivery!')
+    else:
+        messages.add_message(request, messages.INFO, 'Oops!')
+
+    return render(request, 'checkout.html', {'cart': cart, 'total': total_price})
