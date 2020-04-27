@@ -24,7 +24,7 @@ def product_details(request, pid):
 
 
 def product_cart(request, pid):
-
+    # delete old messages
     storage = messages.get_messages(request)
     storage.used = True
 
@@ -64,13 +64,38 @@ def product_cart(request, pid):
 
 def cart_get(request):
     cart = Cart.objects.filter(user=request.user.username).values('product_id', 'product_name', 'product_image', 'price', 'user').annotate(quantity=Sum('quantity'))
+    stock_changed = False
+    for item in cart:
+        in_stock = Product.objects.get(product_id=item.get('product_id')).quantity_in_stock
+        # If empty stock, remove entry from cart
+        if in_stock == 0:
+            Cart.objects.filter(user=request.user.username, product_id=item.get('product_id')).delete()
+            stock_changed = True
+        # Else, change the quantity of that entry in cart
+        elif item.get('quantity') > in_stock:
+            Cart.objects.filter(user=request.user.username, product_id=item.get('product_id')).update(quantity=in_stock)
+            stock_changed = True
+
+    # EDIT: Now print message directly in cart page based on stock_changed
+    # Notify if there are changes in cart
+    # if stock_changed:
+    #     messages.add_message(request, messages.INFO, 'Stock has fewer amount than some of the products in your cart! Please refresh the page to update the changes!')
+
     total_price = 0
     for cart_data in cart:
         total_price += cart_data.get('price') * cart_data.get('quantity')
-    return render(request, 'cart.html', {'cart': cart, 'total': total_price})
+    return render(request, 'cart.html', {'cart': cart, 'total': total_price, 'changed': stock_changed})
+
+
+def orders(request):
+    pass
 
 
 def checkout(request):
+    # delete old messages
+    storage = messages.get_messages(request)
+    storage.used = True
+
     cart = Cart.objects.filter(user=request.user.username).values('product_id', 'product_name', 'product_image', 'price', 'user').annotate(quantity=Sum('quantity'))
     products = Product.objects.all()
     total_price = 0
@@ -86,21 +111,24 @@ def checkout(request):
 
     if name and address:
         order = OrderDJ(user=request.user.username)
-        order.save()
 
-        for item in cart:
-            print(item)
-            # Add to order table
-            order_detail = OrderDetailsDJ(order_id=order.order_id, product_id=item.get('product_id'), user=item.get('user'), customer_name=name, address=address, quantity=item.get('quantity'), price=item.get('price'))
-            order_detail.save()
-            # Decrease quantity in stock
-            product = products.get(product_id=item.get('product_id'))
-            stock_left = product.quantity_in_stock - item.get('quantity')
-            product.quantity_in_stock = stock_left
-            product.save(update_fields=['quantity_in_stock'])
+        if order:
+            order.save()
+            messages.add_message(request, messages.INFO, 'Order accepted! Wait for your delivery!')
 
-        messages.add_message(request, messages.INFO, 'Order accepted! Wait for your delivery!')
-    else:
+            for item in cart:
+                # Add to order table
+                order_detail = OrderDetailsDJ(order_id=order.order_id, product_id=item.get('product_id'), user=item.get('user'), customer_name=name, address=address, quantity=item.get('quantity'), price=item.get('price'))
+                order_detail.save()
+                # Decrease quantity in stock
+                product = products.get(product_id=item.get('product_id'))
+                stock_left = product.quantity_in_stock - item.get('quantity')
+                product.quantity_in_stock = stock_left
+                product.save(update_fields=['quantity_in_stock'])
+
+            # Empty your cart
+            Cart.objects.filter(user=request.user.username).delete()
+            return redirect('/')
         messages.add_message(request, messages.INFO, 'Oops!')
 
     return render(request, 'checkout.html', {'cart': cart, 'total': total_price})
