@@ -17,4 +17,9 @@
                 <a class="btn btn-primary btn-lg" href="products/" role="button">Let's go! >>></a>
             </div>
         </div>
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+            {% endfor %}
+        {% endif %}
 {% endblock %}
