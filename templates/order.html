@@ -1,0 +1,83 @@
+{% extends 'base/navbar.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block title_extend %}Shop - Orders{% endblock %}
+
+{% block head_extend %}
+        <link rel="stylesheet" href="{% static 'css/order.css' %}">
+{% endblock %}
+
+{% block content %}
+        <div class="container-fluid mt-5 pt-3">
+            <section id="header">
+                <h1 class="text-light pl-5">Orders <i class="fas fa-scroll"></i></h1>
+                <hr class="my-4 border-light">
+            </section>
+
+            <section id="products_list">
+                <div class="row justify-content-center my-5">
+                    <div class="col-12">
+                        {% if orders %}
+                            <div class="row order-title my-2 p-2 rounded rounded-lg">
+                                <div class="col-md-1 col-4">
+                                    <p class="text-center text-light font-weight-bold">ID</p>
+                                </div>
+
+                                <div class="col-md-3 col-8 border-left">
+                                    <p class="text-center text-light font-weight-bold">Name (Phone No.)</p>
+                                </div>
+                                
+                                <div class="col-md-5 col-12 border-left">
+                                    <p class="text-center text-light font-weight-bold">Address</p>
+                                </div>
+
+                                <div class="col-md-2 col-6 border-left">
+                                    <p class="text-center text-light font-weight-bold">Price</p>
+                                </div>
+
+                                <div class="col-md-1 col-6 border-left">
+                                    <p class="text-center text-light font-weight-bold">Status</p>
+                                </div>
+                            </div>
+                            {% for order in orders %}
+                                <div class="row order-item my-1 p-2 rounded rounded-lg">
+                                    <!-- ID row -->
+                                    <div class="col-md-1 col-4">
+                                        <p class="text-center">#{{order.order_id}}</p>
+                                    </div>
+
+                                    <div class="col-md-3 col-8 border-left border-dark">
+                                        <p>{{order.customer_name}} ({{order.phone_number}})</p>
+                                    </div>
+                                    
+                                    <div class="col-md-5 col-12 border-left border-dark">
+                                        <p>{{order.address}}</p>
+                                    </div>
+
+                                    <div class="col-md-2 col-6 border-left border-dark">
+                                        <p class="text-center">{{order.total_price}}</p>
+                                    </div>
+
+                                    <div class="col-md-1 col-6 border-left border-dark">
+                                        {% if order.shipped %}
+                                        <p class="text-center text-success">Shipped</p>
+                                        {% else %}
+                                        <p class="text-center text-danger">Pending</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="row justify-content-center my-5">
+                                <div class="col-md-8 col-12 bg-danger rounded rounded-lg">
+                                    <p class="text-light m-2"><i class="fas fa-exclamation-circle"></i>
+                                        You don't have any order yet!</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+{% endblock %}
