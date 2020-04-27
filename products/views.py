@@ -88,7 +88,10 @@ def cart_get(request):
 
 
 def orders(request):
-    pass
+    orders = OrderDJ.objects.filter(user = request.user.username)
+    details = OrderDetailsDJ.objects.filter(user = request.user.username)
+    return render(request, 'order.html', {'orders': orders, 'details': details})
+
 
 
 def checkout(request):
