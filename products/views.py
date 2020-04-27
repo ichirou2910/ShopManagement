@@ -88,10 +88,16 @@ def cart_get(request):
 
 
 def orders(request):
-    orders = OrderDJ.objects.filter(user = request.user.username)
-    details = OrderDetailsDJ.objects.filter(user = request.user.username)
-    return render(request, 'order.html', {'orders': orders, 'details': details})
+    orders_list = OrderDJ.objects.filter(user=request.user.username)
 
+    # order id
+    # username
+    # address
+    # totalprice
+    # for order in orders_list:
+    #     details = OrderDetailsDJ.objects.select_related('order_id').values('customer_name', 'address', '')
+
+    return render(request, 'order.html', {'orders': orders_list})
 
 
 def checkout(request):
@@ -108,20 +114,24 @@ def checkout(request):
     if request.method == 'POST':
         name = request.POST['name']
         address = request.POST['address']
+        phone = request.POST['phone']
     else:
         name = ''
         address = ''
+        phone = ''
 
     if name and address:
-        order = OrderDJ(user=request.user.username)
+        # Create an order
+        order = OrderDJ(user=request.user.username, customer_name=name, address=address, phone_number=phone, total_price=total_price)
 
+        # If success, create orderdetail
         if order:
             order.save()
             messages.add_message(request, messages.INFO, 'Order accepted! Wait for your delivery!')
 
             for item in cart:
                 # Add to order table
-                order_detail = OrderDetailsDJ(order_id=order.order_id, product_id=item.get('product_id'), user=item.get('user'), customer_name=name, address=address, quantity=item.get('quantity'), price=item.get('price'))
+                order_detail = OrderDetailsDJ(order_id=order, product_id=item.get('product_id'), user=item.get('user'), quantity=item.get('quantity'), price=item.get('price'))
                 order_detail.save()
                 # Decrease quantity in stock
                 product = products.get(product_id=item.get('product_id'))

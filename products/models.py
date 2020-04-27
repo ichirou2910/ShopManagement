@@ -37,7 +37,11 @@ class Cart(models.Model):
 
 class OrderDJ(models.Model):
     order_id = models.AutoField(db_column='orderID', primary_key=True)
-    user = models.CharField(db_column='user', max_length=25)
+    user = models.CharField(db_column='user', default='noname', max_length=25)
+    customer_name = models.CharField(db_column='customerName', default='noname', max_length=25)
+    address = models.CharField(db_column='address', default='nonexistent', max_length=100)
+    phone_number = models.CharField(db_column='phoneNumber', default='0000000000', max_length=15)
+    total_price = models.IntegerField(db_column='totalPrice', default=0)
     shipped = models.BooleanField(db_column='shipped', default=False)
 
     class Meta:
@@ -45,12 +49,10 @@ class OrderDJ(models.Model):
 
 
 class OrderDetailsDJ(models.Model):
-    order_id = models.IntegerField(db_column='orderID')
+    # order_id = models.IntegerField(db_column='orderID')
+    order_id = models.ForeignKey('OrderDJ', on_delete=models.CASCADE, db_column='order_id')
     product_id = models.CharField(db_column='productID', max_length=10)
     user = models.CharField(db_column='user', max_length=25)
-    customer_name = models.CharField(db_column='customerName', default='noname', max_length=25)
-    address = models.CharField(db_column='address', default='nonexistent', max_length=100)
-    product_name = models.CharField(db_column='productName', max_length=25)
     quantity = models.IntegerField(db_column='quantity')
     price = models.IntegerField(db_column='sellPrice')
 
