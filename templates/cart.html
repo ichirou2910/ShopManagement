@@ -16,6 +16,14 @@
             </section>
 
             <section id="products_list">
+                {% if changed %}
+                <div class="row justify-content-center my-5">
+                    <div class="col-md-8 col-12 bg-danger rounded rounded-lg">
+                        <p class="text-light m-2"><i class="fas fa-exclamation-circle"></i>
+                            Stock has fewer amount than some of the products in your cart! Please refresh the page to update the changes!</p>
+                    </div>
+                </div>
+                {% endif %}
                 <div class="row justify-content-center my-5">
                     <div class="col-md-8 col-12">
                         <form class="cart" action="">
@@ -61,7 +69,13 @@
                                 <h5 class="card-title font-weight-bold h4">Summary:</h5>
                                 <hr class="my-4">
                                 <p class="card-text text-right">Total Price: <span class="text-danger h3">{{total}}</span></p>
-                                <a href="/products/checkout/" class="btn btn-info">Checkout <i class="fas fa-cash-register"></i></a>
+                                {% if total == 0 %}
+                                <a href="#" class="btn btn-info float-right disabled">Checkout <i class="fas fa-cash-register"></i></a>
+                                {% elif changed %}
+                                    <a href="{{request.path}}" class="btn btn-warning float-right">Refresh <i class="fas fa-redo"></i></a>
+                                {% else %}
+                                <a href="/products/checkout/" class="btn btn-info float-right">Checkout <i class="fas fa-cash-register"></i></a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
