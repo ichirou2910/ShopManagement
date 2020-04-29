@@ -27,6 +27,7 @@
                         <div class="card-body">
                             <h1 class="card-title font-weight-bold">{{product.product_name}}</h5>
                             <p class="card-text">From: {{product.company}}</p>
+                            <p class="card-text">Details: {{product.product_description}}</p>
                             <p class="card-text">Price: {{product.sell_price}}</p>
                             {# If there isn't any left, display Sold Out rather than Add to cart #}
                             {% if product.quantity_in_stock %}
@@ -36,7 +37,7 @@
                                         data-content='<div id="popover-content">
                                             <form method="POST" action="/products/{{product.product_id}}/">
                                                 {% csrf_token %}
-                                                <input type="number" class="border-danger" name="quantity" max="{{product.quantity_in_stock}}" style="width: 65px;" required>
+                                                <input type="number" class="border-danger" name="quantity" min="0" max="{{product.quantity_in_stock}}" style="width: 65px;" required>
                                                 <button class="btn btn-info">Add</button>
                                             </form>
                                         </div>'>

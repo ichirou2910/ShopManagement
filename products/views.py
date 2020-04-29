@@ -41,6 +41,7 @@ def product_cart(request, pid):
     product_get = Product.objects.get(product_id=pid)
     product_id = product_get.product_id
     product_name = product_get.product_name
+    product_image = product_get.product_image
     product_stock = product_get.quantity_in_stock
     price = product_get.sell_price
 
@@ -54,7 +55,7 @@ def product_cart(request, pid):
             messages.add_message(request, messages.INFO, "Heyyyy! You know we do not have that many right?")
         else:
             messages.add_message(request, messages.INFO, 'You have added a product to your cart!')
-            product_in = Cart(product_id=product_id, product_name=product_name, quantity=quantity, price=price, user=user)
+            product_in = Cart(product_id=product_id, product_name=product_name, product_image=product_image, quantity=quantity, price=price, user=user)
             product_in.save()
     else:
         messages.add_message(request, messages.INFO, 'Oops!')
@@ -89,13 +90,6 @@ def cart_get(request):
 
 def orders(request):
     orders_list = OrderDJ.objects.filter(user=request.user.username)
-
-    # order id
-    # username
-    # address
-    # totalprice
-    # for order in orders_list:
-    #     details = OrderDetailsDJ.objects.select_related('order_id').values('customer_name', 'address', '')
 
     return render(request, 'order.html', {'orders': orders_list})
 
