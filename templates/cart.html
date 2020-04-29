@@ -33,7 +33,7 @@
                                     <div class="col-md-2 col-12 text-center">
                                         {# Use default image if product image not provided #}
                                         {% if product.product_image %}
-                                            <img src="{{ product.product_image }}" class="img-thumbnail img-responsive" alt="...">
+                                            <img src="{{product.product_image}}" class="img-thumbnail img-responsive" alt="...">
                                         {% else %}
                                             <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail img-responsive" alt="...">
                                         {% endif %}
@@ -50,7 +50,7 @@
                                                 <p class="font-weight-bold">{{product.product_name}}</p>
                                                 <p>Price each: <span class="text-info">{{product.price}}</span></p>
                                                 <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
-                                                <button class="btn btn-danger">Delete <i class="fas fa-trash-alt"></i></button>
+                                                <!-- <button class="btn btn-danger">Delete <i class="fas fa-trash-alt"></i></button> -->
                                             </div>
                                             <!-- Quantity & Price -->
                                             <div class="col-md-5 col-6 pd-price">
