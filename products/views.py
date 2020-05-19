@@ -139,3 +139,7 @@ def checkout(request):
         messages.add_message(request, messages.INFO, 'Oops!')
 
     return render(request, 'checkout.html', {'cart': cart, 'total': total_price})
+
+def delete_cart(request, pid):
+    Cart.objects.filter(product_id = pid).delete()
+    return redirect('/products/cart')
