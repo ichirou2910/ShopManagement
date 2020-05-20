@@ -1,7 +1,7 @@
 """Import models"""
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.db.models import Sum
+from django.db.models import Sum, Q
 # from django.contrib.auth.models import User
 from .models import Product, Cart, OrderDJ, OrderDetailsDJ
 
@@ -12,6 +12,27 @@ def home(request):
     """ Render product page """
     pds = Product.objects.all()
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
+
+
+def products_filter(request):
+    pds = Product.objects.all()
+
+    if 'filter' in request.GET:
+        availability = request.GET["filter"]
+        if availability == 'avail':
+            pds = Product.objects.filter(~Q(quantity_in_stock=0))
+        elif availability == 'sold-out':
+            pds = Product.objects.filter(quantity_in_stock=0)
+
+    if 'sort' in request.GET:
+        sort = request.GET["sort"]
+        if sort == 'name':
+            pds = pds.order_by('product_name')
+        elif sort == 'price':
+            pds = pds.order_by('sell_price')
+
+    return render(request, 'product.html', {'products': pds, 'count': pds.count()})
+
 
 def search(request):
     pname = request.GET["pname"]
