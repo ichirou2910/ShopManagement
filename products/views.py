@@ -7,22 +7,23 @@ from .models import Product, Cart, OrderDJ, OrderDetailsDJ
 
 # Create your views here.
 
+pds = 1
 
 def home(request):
     """ Render product page """
+    global pds 
     pds = Product.objects.all()
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
 
 def products_filter(request):
-    pds = Product.objects.all()
-
+    global pds
     if 'filter' in request.GET:
         availability = request.GET["filter"]
         if availability == 'avail':
-            pds = Product.objects.filter(~Q(quantity_in_stock=0))
+            pds = pds.filter(~Q(quantity_in_stock=0))
         elif availability == 'sold-out':
-            pds = Product.objects.filter(quantity_in_stock=0)
+            pds = pds.filter(quantity_in_stock=0)
 
     if 'sort' in request.GET:
         sort = request.GET["sort"]
@@ -36,6 +37,7 @@ def products_filter(request):
 
 def search(request):
     pname = request.GET["pname"]
+    global pds
     pds = Product.objects.filter(product_name__icontains = pname)
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
