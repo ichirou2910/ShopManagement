@@ -4,6 +4,12 @@
 - Đây là một web chuyên về bán giày
 - Được thiết kế đơn giản gọn nhẹ nhưng đầy đủ chức năng để mang sự tiện lợi cho cả người bán lẫn người mua.
 - Giao dịch với khách hàng, tạo ra hoá đơn thanh toán cho cả khách hàng lẫn người bán, không hỗ trợ giao dịch trực truyến
+  
+### Admin user cho thầy đăng nhập:
+- Tên: admin
+- Pass: admin
+- Thầy có thể truy cập đường link này để vào trang admin, điều chỉnh dữ liệu trong CSDL:
+https://shoesvendor.herokuapp.com/admin
 
 ## Chức năng
 - Đăng ký/Đăng nhập với tư cách là khách hàng hoặc người bán hàng(thông qua page ẩn admin). Có hệ thống session lưu người dùng kể cả khi đã tắt browser(có các bảng của Django trong CSDL)
