@@ -14,10 +14,32 @@
                 <hr class="my-4 border-light">
             </section>
 
+            <section id="products_filter">
+                <div class="row mx-5 my-2 rounded rounded-lg">
+                    <form class="form-inline my-2 my-lg-0" action="/products/filter">
+                        <div class="form-group bg-success text-light mr-2 p-2 rounded rounded-lg">
+                            <label for="filter" class="font-weight-bold mx-sm-2"><span class="text-dark">Filter: </span></label>
+                            <input id="filter" class="form-control mx-sm-2" type="radio" name="filter" value="avail">Available
+                            <input id="filter" class="form-control mx-sm-2" type="radio" name="filter" value="sold-out">Sold out
+                            <input id="filter" class="form-control mx-sm-2" type="radio" name="" value="" checked>None
+                        </div>
+
+                        <div class="form-group bg-success text-light mx-2 p-2 rounded rounded-lg">
+                            <label for="sort" class="font-weight-bold mx-sm-2"><span class="text-dark">Sort by: </span></label>
+                            <input id="sort" class="form-control mx-sm-2" type="radio" name="sort" value="name"> Name
+                            <input id="sort" class="form-control mx-sm-2" type="radio" name="sort" value="price"> Price
+                            <input id="sort" class="form-control mx-sm-2" type="radio" name="" value="" checked> None
+                        </div>
+                        
+                        <button class="btn btn-warning m-sm-2" type="submit"><i class="fas fa-filter fa-fw"></i> Apply</button></a>
+                    </form>
+                </div>
+            </section>
+
             <section id="products_list">
                 {% if count %}
-                    <div class="row my-5">
-                        <h5 class="text-light ml-5 p-2 bg-info rounded rounded-lg"><i class="fas fa-info-circle"></i> Showing <span class="text-danger">{{count}}</span> product(s).</h4>
+                    <div class="row ml-5">
+                        <h5 class="text-light p-2 bg-info rounded rounded-lg"><i class="fas fa-info-circle"></i> Showing <span class="text-dark">{{count}}</span> product(s).</h4>
                     </div>
                 {% else %}
                     <div class="row justify-content-center my-5">
@@ -27,7 +49,8 @@
                         <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail" alt="...">
                     </div>
                 {% endif %}
-                <div class="row justify-content-center my-5">
+
+                <div class="row justify-content-center">
                     {% for product in products %}
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12 my-3">
                         <div class="card">
@@ -38,10 +61,10 @@
                             <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail card-img-top" alt="...">
                         {% endif %}
                             <!-- <div class="card-body" method="POST" action="{{product.product_id}}/"> -->
-                            <div class="card-body">
+                            <div class="card-body bg-dark">
 
-                                <h5 class="card-title font-weight-bold">{{product.product_name}}</h5>
-                                <p class="card-text">Price: <span class="text-info">{{product.sell_price}}</span></p>
+                                <h5 class="card-title text-light font-weight-bold">{{product.product_name}}</h5>
+                                <p class="card-text text-light">Price: <span class="text-info">{{product.sell_price}}</span></p>
                                 <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">View <i class="fas fa-info-circle"></i></a>
                             {# If there isn't any left, display Sold Out rather than Add to cart #}
                             {% if product.quantity_in_stock <= 0 %}
