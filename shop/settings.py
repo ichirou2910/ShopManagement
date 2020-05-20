@@ -85,11 +85,11 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'heroku_5abb989acb9536e',
-        'USER': 'b3b904e2b6a5bd',
-        'PASSWORD': 'c89c04f9',
-        'HOST': 'us-cdbr-iron-east-01.cleardb.net'
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd4elieektem3s3',
+        'USER': 'cpcdjunpyzlmup',
+        'PASSWORD': 'bd4c93d9da0d9f19ecfef14fd2834ef2a2f14c319595d43eb3fea5d0d153b876',
+        'HOST': 'ec2-52-44-166-58.compute-1.amazonaws.com'
     }
 }
 
