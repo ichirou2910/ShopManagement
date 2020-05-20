@@ -10,12 +10,12 @@ from .models import Product, Cart, OrderDJ, OrderDetailsDJ
 
 def home(request):
     """ Render product page """
-    if request.method == 'POST':
-        pname = request.POST['pname']
-        pds = Product.objects.filter(product_name__icontains=pname)
-    else:
-        pds = Product.objects.all()
-        print("ALL")
+    pds = Product.objects.all()
+    return render(request, 'product.html', {'products': pds})
+
+def search(request):
+    pname = request.GET["pname"]
+    pds = Product.objects.filter(product_name__icontains = pname)
     return render(request, 'product.html', {'products': pds})
 
 
