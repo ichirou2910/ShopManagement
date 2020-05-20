@@ -26,10 +26,14 @@ def products_filter(request):
 
     if 'sort' in request.GET:
         sort = request.GET["sort"]
-        if sort == 'name':
+        if sort == 'name-a-to-z':
             pds = pds.order_by('product_name')
-        elif sort == 'price':
+        elif sort == 'name-z-to-a':
+            pds = pds.order_by('-product_name')
+        elif sort == 'price-up':
             pds = pds.order_by('sell_price')
+        elif sort == 'price-down':
+            pds = pds.order_by('-sell_price')
 
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
