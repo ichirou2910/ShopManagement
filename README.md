@@ -47,9 +47,9 @@ VALUES (user, customer_name, address, phone, total_price)
 - Homepage - landing page
 <img src="README_image/homepage.png">
 - Register 
-<img src="README_image/register.png">
+<img src="README_image/Register.png">
 - Login
-<img src="README_image/login.png">
+<img src="README_image/Login.png">
 - Trang sản phẩm
 <img src="README_image/Products.png" >
 - Chi tiết sản phẩm
