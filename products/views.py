@@ -11,12 +11,12 @@ from .models import Product, Cart, OrderDJ, OrderDetailsDJ
 def home(request):
     """ Render product page """
     pds = Product.objects.all()
-    return render(request, 'product.html', {'products': pds})
+    return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
 def search(request):
     pname = request.GET["pname"]
     pds = Product.objects.filter(product_name__icontains = pname)
-    return render(request, 'product.html', {'products': pds})
+    return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
 
 def product_details(request, pid):

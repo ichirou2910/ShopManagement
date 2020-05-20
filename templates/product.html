@@ -14,14 +14,19 @@
                 <hr class="my-4 border-light">
             </section>
 
-            <form action = "search" method="GET">
-                
-                <label>Search</label>
-                <input type="text" class="form-control" name="pname">
-                <input type="submit">
-            </form>
-
             <section id="products_list">
+                {% if count %}
+                    <div class="row my-5">
+                        <h5 class="text-light ml-5 p-2 bg-info rounded rounded-lg"><i class="fas fa-info-circle"></i> Showing <span class="text-danger">{{count}}</span> product(s).</h4>
+                    </div>
+                {% else %}
+                    <div class="row justify-content-center my-5">
+                        <h3 class="text-light pl-5">No result....Dead empty<h5>
+                    </div>
+                    <div class="row justify-content-center my-5">
+                        <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail" alt="...">
+                    </div>
+                {% endif %}
                 <div class="row justify-content-center my-5">
                     {% for product in products %}
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12 my-3">
