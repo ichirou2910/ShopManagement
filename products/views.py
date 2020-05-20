@@ -141,5 +141,5 @@ def checkout(request):
     return render(request, 'checkout.html', {'cart': cart, 'total': total_price})
 
 def delete_cart(request, pid):
-    Cart.objects.filter(product_id = pid).delete()
+    Cart.objects.filter(user = request.user.username, product_id = pid).delete()
     return redirect('/products/cart')
