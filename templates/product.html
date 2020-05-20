@@ -14,6 +14,13 @@
                 <hr class="my-4 border-light">
             </section>
 
+            <form action = "" method="POST">
+                {% csrf_token %}
+                <label>Search</label>
+                <input type="text" class="form-control" name="pname">
+                <input type="submit">
+            </form>
+
             <section id="products_list">
                 <div class="row justify-content-center my-5">
                     {% for product in products %}
