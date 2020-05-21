@@ -16,7 +16,7 @@
 
             <section id="products_filter">
                 <div class="row mx-5 my-2 rounded rounded-lg">
-                    <form class="form-inline my-2 my-lg-0" action="/products/search">
+                    <form id="advanced-filter" class="form-inline my-2 my-lg-0" action="/products/search">
                         <div class="form-group bg-success text-light mr-2 p-2 rounded rounded-lg">
                             <label for="pname" class="font-weight-bold mx-sm-2"><span class="text-dark">Search: </span></label>
                             <input id="pname" class="form-control mr-sm-2" name="pname" type="search" placeholder="Search" aria-label="Search">
@@ -24,14 +24,14 @@
             
                         <div id="filter" class="form-group bg-success text-light mx-2 p-2 rounded rounded-lg">
                             <label for="filter" class="font-weight-bold mx-sm-2"><span class="text-dark">Filter: </span></label>
-                            <input id="filter0" class="form-control mx-sm-2" type="radio" name="" value="">None
+                            <input id="filter0" class="form-control mx-sm-2" type="radio" name="filter" value="">None
                             <input id="filter1" class="form-control mx-sm-2" type="radio" name="filter" value="avail">Available
                             <input id="filter2" class="form-control mx-sm-2" type="radio" name="filter" value="sold-out">Sold out
                         </div>
 
                         <div id="sort" class="form-group bg-success text-light mx-2 p-2 rounded rounded-lg">
                             <label for="sort" class="font-weight-bold mx-sm-2"><span class="text-dark">Sort by: </span></label>
-                            <input id="sort0" class="form-control mx-sm-2" type="radio" name="" value=""> None
+                            <input id="sort0" class="form-control mx-sm-2" type="radio" name="sort" value=""> None
                             <input id="sort1" class="form-control mx-sm-2" type="radio" name="sort" value="name-a-to-z"> A-Z
                             <input id="sort2" class="form-control mx-sm-2" type="radio" name="sort" value="name-z-to-a"> Z-A
                             <input id="sort3" class="form-control mx-sm-2" type="radio" name="sort" value="price-up"> Price Up
@@ -50,7 +50,7 @@
                     </div>
                 {% else %}
                     <div class="row justify-content-center my-5">
-                        <h3 class="text-light pl-5">No result....Dead empty<h5>
+                        <h3 class="text-light">No result....Dead empty....<h5>
                     </div>
                     <div class="row justify-content-center my-5">
                         <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail" alt="...">
@@ -113,4 +113,16 @@
             var id = localStorage.getItem("sort");
             $('#'+id).prop('checked', true);
         }
+
+        // Remove empty field when submit
+        $("#advanced-filter").submit(function()
+        {
+            $(this).find('input[name]').filter(function ()
+                {
+                    return !this.value;
+                }).prop('disabled', true);
+
+            // ensure form still submits
+            return true; 
+        });
 {% endblock %}
