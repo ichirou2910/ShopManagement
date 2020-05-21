@@ -13,8 +13,13 @@ def home(request):
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
 
-def products_filter(request):
+def search(request):
     pds = Product.objects.all()
+
+    if 'pname' in request.GET:
+        pname = request.GET["pname"]
+        pds = pds.filter(product_name__icontains=pname)
+
     if 'filter' in request.GET:
         availability = request.GET["filter"]
         if availability == 'avail':
@@ -33,12 +38,6 @@ def products_filter(request):
         elif sort == 'price-down':
             pds = pds.order_by('-sell_price')
 
-    return render(request, 'product.html', {'products': pds, 'count': pds.count()})
-
-
-def search(request):
-    pname = request.GET["pname"]
-    pds = Product.objects.filter(product_name__icontains = pname)
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
 
@@ -168,6 +167,7 @@ def checkout(request):
 
     return render(request, 'checkout.html', {'cart': cart, 'total': total_price})
 
+
 def delete_cart(request, pid):
-    Cart.objects.filter(user = request.user.username, product_id = pid).delete()
+    Cart.objects.filter(user=request.user.username, product_id=pid).delete()
     return redirect('/products/cart')
