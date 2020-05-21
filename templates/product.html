@@ -8,6 +8,11 @@
 {% endblock %}
 
 {% block content %}
+        <!-- Clear all input choice if enter products/ (without filter request) -->
+        {% if request.path == '/products/' %}
+            <script>localStorage.clear();</script>
+        {% endif %}
+
         <div class="container-fluid mt-5 pt-3">
             <section id="header">
                 <h1 class="text-light pl-5">Products <i class="fas fa-store-alt"></i></h1>
