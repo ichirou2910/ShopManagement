@@ -31,6 +31,25 @@
                     sanitize: false,
                 })
             })
+
+            // Persistent name field after submit
+            if (localStorage.getItem("name") != null)
+            {
+                $('#pname').val(localStorage.getItem("name"));
+            }
+
+            $('#pname').change(function()
+                {
+                    localStorage.setItem("name", $('#pname').val());
+                })
+
+            $('#name').change(function()
+                {
+                    localStorage.clear();
+                    localStorage.setItem("name", $('#name').val());
+                });
+    
+            {% block script %}{% endblock %}
         </script>
 
     </body>
