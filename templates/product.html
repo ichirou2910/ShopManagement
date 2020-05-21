@@ -16,21 +16,26 @@
 
             <section id="products_filter">
                 <div class="row mx-5 my-2 rounded rounded-lg">
-                    <form class="form-inline my-2 my-lg-0" action="/products/filter">
+                    <form class="form-inline my-2 my-lg-0" action="/products/search">
                         <div class="form-group bg-success text-light mr-2 p-2 rounded rounded-lg">
+                            <label for="pname" class="font-weight-bold mx-sm-2"><span class="text-dark">Search: </span></label>
+                            <input id="pname" class="form-control mr-sm-2" name="pname" type="search" placeholder="Search" aria-label="Search">
+                        </div>
+            
+                        <div id="filter" class="form-group bg-success text-light mx-2 p-2 rounded rounded-lg">
                             <label for="filter" class="font-weight-bold mx-sm-2"><span class="text-dark">Filter: </span></label>
-                            <input id="filter" class="form-control mx-sm-2" type="radio" name="filter" value="avail">Available
-                            <input id="filter" class="form-control mx-sm-2" type="radio" name="filter" value="sold-out">Sold out
-                            <input id="filter" class="form-control mx-sm-2" type="radio" name="" value="">None
+                            <input id="filter0" class="form-control mx-sm-2" type="radio" name="" value="">None
+                            <input id="filter1" class="form-control mx-sm-2" type="radio" name="filter" value="avail">Available
+                            <input id="filter2" class="form-control mx-sm-2" type="radio" name="filter" value="sold-out">Sold out
                         </div>
 
-                        <div class="form-group bg-success text-light mx-2 p-2 rounded rounded-lg">
+                        <div id="sort" class="form-group bg-success text-light mx-2 p-2 rounded rounded-lg">
                             <label for="sort" class="font-weight-bold mx-sm-2"><span class="text-dark">Sort by: </span></label>
-                            <input id="sort" class="form-control mx-sm-2" type="radio" name="sort" value="name-a-to-z"> A-Z
-                            <input id="sort" class="form-control mx-sm-2" type="radio" name="sort" value="name-z-to-a"> Z-A
-                            <input id="sort" class="form-control mx-sm-2" type="radio" name="sort" value="price-up"> Price Up
-                            <input id="sort" class="form-control mx-sm-2" type="radio" name="sort" value="price-down"> Price Down
-                            <input id="sort" class="form-control mx-sm-2" type="radio" name="" value=""> None
+                            <input id="sort0" class="form-control mx-sm-2" type="radio" name="" value=""> None
+                            <input id="sort1" class="form-control mx-sm-2" type="radio" name="sort" value="name-a-to-z"> A-Z
+                            <input id="sort2" class="form-control mx-sm-2" type="radio" name="sort" value="name-z-to-a"> Z-A
+                            <input id="sort3" class="form-control mx-sm-2" type="radio" name="sort" value="price-up"> Price Up
+                            <input id="sort4" class="form-control mx-sm-2" type="radio" name="sort" value="price-down"> Price Down
                         </div>
                         
                         <button class="btn btn-warning m-sm-2" type="submit"><i class="fas fa-filter fa-fw"></i> Apply</button></a>
@@ -85,4 +90,27 @@
                 {% endfor %}
             {% endif %}
         </div>
+
+{% endblock %}
+
+{% block script_extend %}
+        // Persistent filter status after submit
+        $('input[name="filter"]').on('change', function(){
+            localStorage.setItem('filter', this.id);
+        });
+    
+        if(localStorage.getItem("filter") !== null){
+            var id = localStorage.getItem("filter");
+            $('#'+id).prop('checked', true);
+        }
+        
+        // Persistent sort status after submit
+        $('input[name="sort"]').on('change', function(){
+            localStorage.setItem('sort', this.id);
+        });
+    
+        if(localStorage.getItem("sort") !== null){
+            var id = localStorage.getItem("sort");
+            $('#'+id).prop('checked', true);
+        }
 {% endblock %}
