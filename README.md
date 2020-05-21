@@ -14,6 +14,7 @@ https://shoesvendor.herokuapp.com/admin
 ## Chức năng
 - Đăng ký/Đăng nhập với tư cách là khách hàng hoặc người bán hàng(thông qua page ẩn admin). Có hệ thống session lưu người dùng kể cả khi đã tắt browser(có các bảng của Django trong CSDL)
 - Có page product đưa ra danh sách hàng, mỗi hàng sẽ có nút View Details để hiện thêm thông tin
+- Có thể tìm kiếm món hàng bằng cách nhập tên. Có thể lọc và sắp xếp hàng theo tên hoặc giá
 - Trong thông tin sản phẩm, người mua có thể thêm hàng vào rỏ hàng với số lượng tuỳ thích. Sẽ thông báo "Đã cho vào rỏ hàng" nếu thêm vào thành công. Số lượng tồn kho sẽ giảm nếu hàng được thanh toán
 - Ở đây có bảng Cart để lưu thông tin các món hàng. Các món hàng được phân biệt với nhau qua mã hàng và người mua, kèm theo số lượng và giá mỗi hàng.
 - Có các hàm xử lý sao cho nhiều người dùng cùng thêm hàng cùng một lúc. Khi hết hàng mà người khác vốn đã thêm từ trước, thì món hàng đó sẽ bị mất, kèm theo một thông báo cho người dùng.
