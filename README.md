@@ -40,6 +40,13 @@ SELECT * FROM `orderDJ` WHERE `user` = request.user.username
 - Thêm chi tiết vào bảng orderDJ: </br>
 INSERT INTO orderDJ(`user`, `customer_name`, `address`, `phone`, `total_price`)</br>
 VALUES (user, customer_name, address, phone, total_price)
+- Tìm kiếm món hàng theo định dạng tên hàng: </br>
+SELECT * FROM `products` </br> 
+WHERE UPPER(`products`.`productName`::text) LIKE UPPER(%adidas%)
+- Lọc hàng mà không Out Of Stock: </br>
+SELECT * FROM `products` WHERE NOT (`products`.`quantityInStock` = 0)
+- Sắp xếp vị trí món hàng theo bảng chữ cái: </br>
+SELECT * FROM `products` ORDER BY `products`.`productName` ASC
 
 ## Quá trình phát triển
 - Định hình mục tiêu là làm web bán giày và nền tảng cho nó là Django
