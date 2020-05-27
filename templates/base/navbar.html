@@ -25,6 +25,12 @@
                     <a class="nav-link" href="/products">Products</a>
                 </li>
 
+                {% if user.is_superuser %}
+                <li class="text-primary nav-item">
+                    <a class="nav-link" href="/admin">Admin</a>
+                </li>
+                {% endif %}
+
                 {% if user.is_authenticated %}
                 <li class="dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -1,0 +1,61 @@
+{% extends 'base/navbar.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block title_extend %}Shop - Cart{% endblock %}
+
+{% block head_extend %}
+        <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+        <div class="container-fluid mt-5 pt-3">
+            <section id="header">
+                <h1 class="text-light pl-5">Products <i class="fas fa-store-alt"></i></h1>
+                <a href="/admin/products/add" class="btn btn-warning">Add Product</a>
+                <hr class="my-4 border-light">
+            </section>
+
+            <section id="products_list">
+                <div class="row justify-content-center my-5">
+                    <div class="col-md-8 col-12">
+                        <form class="cart" action="">
+                            {% for product in products %}
+                                <div class="row cart-item my-1 p-2 rounded rounded-lg">
+                                    <!-- Product image row -->
+                                    <div class="col-md-2 col-12 text-center">
+                                        {# Use default image if product image not provided #}
+                                        {% if product.product_image %}
+                                            <img src="{{product.product_image}}" class="img-thumbnail img-responsive" alt="...">
+                                        {% else %}
+                                            <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail img-responsive" alt="...">
+                                        {% endif %}
+                                    </div>
+                                    <!-- ID row -->
+                                    <div class="col-1">
+                                        <p>#{{product.product_id}}</p>
+                                    </div>
+
+                                    <!-- Product info row -->
+                                    <div class="col-md-9 col-11">
+                                        <div class="row">
+                                            <div class="col-md-7 col-6 pd-info">
+                                                <p class="font-weight-bold">{{product.product_name}}</p>
+                                                <p>Price each: <span class="text-info">{{product.sell_price}}</span></p>
+                                                <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
+                                                <a href="/admin/products/{{product.product_id}}" class="btn btn-danger">Edit </a>
+                                            </div>
+
+                                            <div class="col-md-5 col-6 pd-price">
+                                                <p>Quantity: <span class="text-primary font-weight-bold">{{product.quantity_in_stock}}</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+{% endblock %}
