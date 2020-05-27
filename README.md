@@ -4,7 +4,7 @@
 - Đây là một web chuyên về bán giày
 - Được thiết kế đơn giản gọn nhẹ nhưng đầy đủ chức năng để mang sự tiện lợi cho cả người bán lẫn người mua.
 - Giao dịch với khách hàng, tạo ra hoá đơn thanh toán cho cả khách hàng lẫn người bán, không hỗ trợ giao dịch trực truyến
-  
+ 
 ### Admin user cho thầy đăng nhập:
 - Tên: admin
 - Pass: admin
@@ -23,40 +23,69 @@ https://shoesvendor.herokuapp.com/admin
 - Có page Order - hoá đơn để người dùng xem, hiện ra thông tin về hàng và người mua, tổng tiền và trạng thái gửi.
 
 ## Các câu lệnh SQL chính
-- Lấy sản phẩm theo id riêng: </br>
-SELECT * FROM `products` WHERE `product_id` = pid
-- Lấy danh sách sản phẩm trong cart sau khi được Group By theo id sản phẩm: </br>
-SELECT *, SUM(`cart`.`quantity`) AS `quantity` </br>FROM `cart` WHERE `user` = username</br> GROUP BY `cart`.`productID`, `cart`.`productName`, `cart`.`productImage`, `cart`.`sellPrice`, `cart`.`user`
-- Lấy thông tin hàng được chọn bởi người dùng và cho vào giỏ hàng: </br>
-INSERT INTO cart(`product_id`, `product_name`, `product_image`, `quantity`, `user`)
-</br>VALUES (product_id, product_name, product_image, quantity, user)
-- Xoá hàng khỏi giỏ nếu người dùng muốn hoặc do hết hàng: </br>
-DELETE FROM cart</br> WHERE `user` = request.user.username AND `product_id` = pid
-- Cập nhật số lượng trong giỏ nếu hàng tồn kho không đủ: </br>
-UPDATE cart </br>SET quantity = in_stock </br>WHERE `user` = request.user.username AND `product_id` = pid
-- Cập nhật số hàng tồn kho sau khi đã thanh toán: </br>
-UPDATE products </br>SET quantity = quantity_in_stock</br> WHERE `product_id` = pid
-- Hiện hoá đơn cho người dùng: </br>
-SELECT * FROM `orderDJ` WHERE `user` = request.user.username
-- Thêm chi tiết vào bảng orderDJ: </br>
-INSERT INTO orderDJ(`user`, `customer_name`, `address`, `phone`, `total_price`)</br>
-VALUES (user, customer_name, address, phone, total_price)
-- Tìm kiếm món hàng theo định dạng tên hàng: </br>
-SELECT * FROM `products` </br> 
-WHERE UPPER(`products`.`productName`::text) LIKE UPPER(%adidas%)
-- Lọc hàng mà không Out Of Stock: </br>
-SELECT * FROM `products` WHERE NOT (`products`.`quantityInStock` = 0)
-- Sắp xếp vị trí món hàng theo bảng chữ cái: </br>
-SELECT * FROM `products` ORDER BY `products`.`productName` ASC
+- Lấy sản phẩm theo id riêng:
+    ```
+    SELECT * FROM `products` WHERE `product_id` = pid
+    ```
+- Lấy danh sách sản phẩm trong cart sau khi được Group By theo id sản phẩm:
+    ```
+    SELECT *, SUM(`cart`.`quantity`) AS `quantity` FROM `cart` WHERE `user` = username 
+    GROUP BY `cart`.`productID`, `cart`.`productName`, `cart`.`productImage`, `cart`.`sellPrice`, `cart`.`user`
+    ```
+- Lấy thông tin hàng được chọn bởi người dùng và cho vào giỏ hàng:
+    ```
+    INSERT INTO cart(`product_id`, `product_name`, `product_image`, `quantity`, `user`)
+    VALUES (product_id, product_name, product_image, quantity, user)
+    ``` 
+- Xoá hàng khỏi giỏ nếu người dùng muốn hoặc do hết hàng:
+    ```
+    DELETE FROM cart
+    WHERE `user` = request.user.username AND `product_id` = pid
+    ```
+- Cập nhật số lượng trong giỏ nếu hàng tồn kho không đủ:
+    ```
+    UPDATE cart
+    SET quantity = in_stock
+    WHERE `user` = request.user.username AND `product_id` = pid
+    ```
+- Cập nhật số hàng tồn kho sau khi đã thanh toán:
+    ```
+    UPDATE products
+    SET quantity = quantity_in_stock
+    WHERE `product_id` = pid
+    ```
+- Hiện hoá đơn cho người dùng:
+    ```
+    SELECT * FROM `orderDJ` WHERE `user` = request.user.username
+    ```
+- Thêm chi tiết vào bảng orderDJ:
+    ```
+    INSERT INTO orderDJ(`user`, `customer_name`, `address`, `phone`, `total_price`)
+    VALUES (user, customer_name, address, phone, total_price)
+    ```
+- Tìm kiếm món hàng theo định dạng tên hàng:
+    ```
+    SELECT * FROM `products` 
+    WHERE UPPER(`products`.`productName`::text) LIKE UPPER(%adidas%)
+    ```
+- Lọc hàng mà không Out Of Stock:
+    ```
+    SELECT * FROM `products` WHERE NOT (`products`.`quantityInStock` = 0)
+    ```
+- Sắp xếp vị trí món hàng theo bảng chữ cái:
+    ```
+    SELECT * FROM `products` ORDER BY `products`.`productName` ASC
+    ```
 
 ## Quá trình phát triển
 - Định hình mục tiêu là làm web bán giày và nền tảng cho nó là Django
-- Cả nhóm đầu tư vào học Django, xây dựng CSDL
+- Thiết kế cấu trúc trang web
 - Xây dựng các thành phần back-end của Django, bắt đầu xây dựng chức năng
 - Xây dựng front-end cho web với HTML, CSS, JS và Bootstrap. Đồng thời cũng dùng Jinja cho dynamic data
 - Kiểm thử các chức năng như nhiều người cùng thêm và thanh toán hàng, hết hàng
-- Hoàn thiện mọi thứ
-  
+- **FIX BUG**
+- Hoàn thiện trang web
+
 ## Ảnh demo web
 - Homepage - landing page
 <img src="README_image/homepage.png">
