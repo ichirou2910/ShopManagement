@@ -9,3 +9,4 @@ shop/__pycache__
 mainpage/migrations/__pycache__
 products/__pycache__
 products/migrations/__pycache__
+shop/settings.py
