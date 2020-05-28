@@ -20,7 +20,7 @@
                 <div class="row justify-content-center my-5">
                     <div class="col-md-8 col-12 bg-danger rounded rounded-lg">
                         <p class="text-light m-2"><i class="fas fa-exclamation-circle"></i>
-                            Stock has fewer amount than some of the products in your cart! Please refresh the page to update the changes!</p>
+                            Stock has fewer amount than some of the products in your cart! Please refresh the page to .product_id.te the changes!</p>
                     </div>
                 </div>
                 {% endif %}
@@ -32,30 +32,30 @@
                                     <!-- Product image row -->
                                     <div class="col-md-2 col-12 text-center">
                                         {# Use default image if product image not provided #}
-                                        {% if product.pd.product_image %}
-                                            <img src="{{product.pd.product_image}}" class="img-thumbnail img-responsive" alt="...">
+                                        {% if product.product_id.product_image %}
+                                            <img src="{{product.product_id.product_image}}" class="img-thumbnail img-responsive" alt="...">
                                         {% else %}
                                             <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail img-responsive" alt="...">
                                         {% endif %}
                                     </div>
                                     <!-- ID row -->
                                     <div class="col-1">
-                                        <p>#{{product.product_id}}</p>
+                                        <p>#{{product.product_id.product_id}}</p>
                                     </div>
 
                                     <!-- Product info row -->
                                     <div class="col-md-9 col-11">
                                         <div class="row">
-                                            <div class="col-md-7 col-6 pd-info">
-                                                <p class="font-weight-bold">{{product.pd.product_name}}</p>
-                                                <p>Price each: <span class="text-info">{{product.pd.sell_price}}</span></p>
-                                                <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
-                                                <a href="/products/cart/{{product.product_id}}" class="btn btn-danger">Delete <i class="fas fa-trash-alt"></i></a>
+                                            <div class="col-md-7 col-6.product_id.info">
+                                                <p class="font-weight-bold">{{product.product_id.product_name}}</p>
+                                                <p>Price each: <span class="text-info">{{product.product_id.sell_price}}</span></p>
+                                                <a href="/products/viewproduct/{{product.product_id.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
+                                                <a href="/products/cart/delete/{{product.product_id.product_id}}" class="btn btn-danger">Delete <i class="fas fa-trash-alt"></i></a>
                                             </div>
                                             <!-- Quantity & Price -->
-                                            <div class="col-md-5 col-6 pd-price">
+                                            <div class="col-md-5 col-6.product_id.price">
                                                 <p>Quantity: <span class="text-primary font-weight-bold">{{product.quantity}}</span></p>
-                                                <p>Total: <span class="text-info font-weight-bold">{{product.quantity|mul:product.pd.sell_price}}</span></p>
+                                                <p>Total: <span class="text-info font-weight-bold">{{product.quantity|mul:product.product_id.sell_price}}</span></p>
                                             </div>
                                         </div>
                                     </div>

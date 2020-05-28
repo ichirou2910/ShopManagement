@@ -14,7 +14,7 @@ def home(request):
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
 
-def search(request):
+def product_search(request):
     pds = Product.objects.all()
 
     if 'pname' in request.GET:
@@ -51,9 +51,9 @@ def product_details(request, pid):
     return render(request, 'details.html', {'product': product, 'quantity': quantity})
 
 
-def product_cart(request, pid):
+def cart_add(request, pid):
     if request.user.is_superuser:
-        return redirect('/admin/orders')
+        return HttpResponse("Invalid")
     # delete old messages
     storage = messages.get_messages(request)
     storage.used = True
@@ -71,25 +71,24 @@ def product_cart(request, pid):
     product_get = Product.objects.get(product_id=pid)
     product_stock = product_get.quantity_in_stock
 
-    in_cart = Cart.objects.filter(user=request.user.username, product_id=pid)
+    in_cart = Cart.objects.filter(user=request.user.username, product_id__pk=pid)
     cart_quantity = 0
     if in_cart:
-        cart_quantity = in_cart.get(product_id=pid).quantity
-        print(cart_quantity)
+        cart_quantity = in_cart.get(product_id__pk=pid).quantity
 
     if quantity != 0 and user != "none":
         if int(quantity) + cart_quantity > product_stock:
             messages.add_message(request, messages.INFO, "Heyyyy! You know we do not have that many right?")
         else:
             messages.add_message(request, messages.INFO, 'You have added a product to your cart!')
-            product_temp = Cart.objects.filter(user=request.user.username, product_id=pid)
+            product_temp = Cart.objects.filter(user=request.user.username, product_id__pk=pid)
             if product_temp:
-                pd = product_temp.get(product_id=pid)
-                pd.quantity = int(quantity) + cart_quantity
-                pd.save(update_fields=['quantity'])
+                pd_temp = product_temp.get(product_id__pk=pid)
+                pd_temp.quantity = int(quantity) + cart_quantity
+                pd_temp.save(update_fields=['quantity'])
             else:
                 print('Product not found. Creating new.')
-                product_new = Cart(product_id=pid, pd=Product.objects.get(product_id=pid), quantity=quantity, user=user)
+                product_new = Cart(product_id=Product.objects.get(product_id=pid), quantity=quantity, user=user)
                 product_new.save()
     else:
         messages.add_message(request, messages.INFO, 'Oops!')
@@ -99,12 +98,12 @@ def product_cart(request, pid):
 
 def cart_get(request):
     if request.user.is_superuser:
-        return redirect('/admin/orders')
-    cart = Cart.objects.filter(user=request.user.username).select_related('pd')
+        return HttpResponse("Invalid")
+    cart = Cart.objects.filter(user=request.user.username).select_related('product_id')
     stock_changed = False
     total_price = 0
     for item in cart:
-        in_stock = Product.objects.get(product_id=item.product_id).quantity_in_stock
+        in_stock = item.product_id.quantity_in_stock
         # If empty stock, remove entry from cart
         if in_stock == 0:
             Cart.objects.filter(user=request.user.username, product_id=item.product_id).delete()
@@ -114,33 +113,32 @@ def cart_get(request):
             Cart.objects.filter(user=request.user.username, product_id=item.product_id).update(quantity=in_stock)
             stock_changed = True
 
-        total_price += Product.objects.get(product_id=item.product_id).sell_price * item.quantity
+        total_price += item.product_id.sell_price * item.quantity
 
     return render(request, 'cart.html', {'cart': cart, 'changed': stock_changed, 'total': total_price})
 
 
-def orders(request):
+def orders_get(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            orders_list = Orders.objects.order_by('order_id')
+            orders_list = Orders.objects.order_by('-order_id')
         else:
-            orders_list = Orders.objects.filter(user=request.user.username).order_by('order_id')
+            orders_list = Orders.objects.filter(user=request.user.username).order_by('-order_id')
         return render(request, 'order.html', {'orders': orders_list})
     return HttpResponse("You don't have permission to view this page")
 
 
-def checkout(request):
+def cart_checkout(request):
     if request.user.is_superuser:
-        return redirect('/admin/orders')
+        return HttpResponse("Invalid")
     # delete old messages
     storage = messages.get_messages(request)
     storage.used = True
 
-    cart = Cart.objects.filter(user=request.user.username).select_related('pd')
-    products = Product.objects.all()
+    cart = Cart.objects.filter(user=request.user.username).select_related('product_id')
     total_price = 0
     for item in cart:
-        total_price += item.pd.sell_price * item.quantity
+        total_price += item.product_id.sell_price * item.quantity
 
     if request.method == 'POST':
         name = request.POST['name']
@@ -162,12 +160,12 @@ def checkout(request):
 
             for item in cart:
                 # Add to order table
-                order_detail = OrderDetails(order_id=order, product_id=item.product_id, user=item.user, quantity=item.quantity, pd=Product.objects.get(product_id=item.product_id))
+                order_detail = OrderDetails(order_id=order, user=item.user, quantity=item.quantity, product_id=Product.objects.get(product_id=item.product_id.product_id))
                 order_detail.save()
                 # Decrease quantity in stock
-                product = products.get(product_id=item.product_id)
-                product.quantity_in_stock = product.quantity_in_stock - item.quantity
-                product.save(update_fields=['quantity_in_stock'])
+                # product = products.get(product_id=item.product_id.product_id)
+                item.product_id.quantity_in_stock -= item.quantity
+                item.product_id.save(update_fields=['quantity_in_stock'])
 
             # Empty your cart
             Cart.objects.filter(user=request.user.username).delete()
@@ -177,8 +175,26 @@ def checkout(request):
     return render(request, 'checkout.html', {'cart': cart, 'total': total_price})
 
 
-def delete_cart(request, pid):
+def cart_delete(request, pid):
+    if request.user.is_superuser:
+        return HttpResponse("Invalid")
+    Cart.objects.filter(product_id__pk=pid).delete()
+    return redirect('/products/cart')
+
+
+def order_cancel(request, oid):
+    if request.user.is_superuser:
+        return HttpResponse("Invalid")
+    order = Orders.objects.get(order_id=oid)
+    order.status = 'Canceled'
+    order.save(update_fields=['status'])
+    return redirect('/products/orders')
+
+
+def order_details(request, oid):
     if request.user.is_superuser:
         return redirect('/admin/orders')
-    Cart.objects.filter(user=request.user.username, product_id=pid).delete()
-    return redirect('/products/cart')
+    order = Orders.objects.get(order_id=oid)
+    details = OrderDetails.objects.filter(order_id=oid).select_related('product_id')
+
+    return render(request, 'orderdetails.html', {'id': oid, 'status': order.status, 'details': details, 'total': order.total_price})
