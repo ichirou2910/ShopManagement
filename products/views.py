@@ -11,7 +11,7 @@ from .models import Product, Cart, OrderDJ, OrderDetailsDJ
 
 def home(request):
     """ Render product page """
-    pds = Product.objects.all()
+    pds = Product.objects.all().order_by('product_id')
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
 
