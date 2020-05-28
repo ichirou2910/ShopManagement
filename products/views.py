@@ -124,9 +124,9 @@ def cart_get(request):
 def orders(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            orders_list = OrderDJ.objects.all()
+            orders_list = OrderDJ.objects.all().order_by('order_id')
         else:
-            orders_list = OrderDJ.objects.filter(user=request.user.username)
+            orders_list = OrderDJ.objects.filter(user=request.user.username).order_by('order_id')
         return render(request, 'order.html', {'orders': orders_list})
     return HttpResponse("You don't have permission to view this page")
 

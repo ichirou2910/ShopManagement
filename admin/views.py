@@ -96,27 +96,21 @@ def product_accept_add(request):
 
 
 ### Admin's order functions ###
-def order(request):
-    if request.user.is_superuser:
-        orders_list = OrderDJ.objects.all()
-
-        return render(request, 'admin_order.html', {'orders': orders_list})
-    return HttpResponse("You don't have permission to view this page")
-
 
 def status_change(request, oid):
     if request.user.is_superuser:
         order = OrderDJ.objects.get(order_id=oid)
+        print("OID= " + oid)
 
         if order.shipped is False:
-            order.shipped is True
+            order.shipped = True
             print("It's false->true")
         else:
             order.shipped = False
             print("It's true->false")
 
         order.save(update_fields=["shipped"])
-        return redirect('/admin/orders')
+        return redirect('/products/orders')
     return HttpResponse("You don't have permission to view this page")
 
 
