@@ -2,10 +2,10 @@
 {% load static %}
 {% load mathfilters %}
 
-{% block title_extend %}Admin - Orders{% endblock %}
+{% block title_extend %}Order Details{% endblock %}
 
 {% block head_extend %}
-        <link rel="stylesheet" href="{% static 'css/order.css' %}">
+        <link rel="stylesheet" href="{% static 'css/orderdetails.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -24,29 +24,29 @@
                                     <!-- Product image row -->
                                     <div class="col-md-2 col-12 text-center">
                                         {# Use default image if product image not provided #}
-                                        {% if product.pd.product_image %}
-                                            <img src="{{product.pd.product_image}}" class="img-thumbnail img-responsive" alt="...">
+                                        {% if product.product_id.product_image %}
+                                            <img src="{{product.product_id.product_image}}" class="img-thumbnail img-responsive" alt="...">
                                         {% else %}
                                             <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail img-responsive" alt="...">
                                         {% endif %}
                                     </div>
                                     <!-- ID row -->
                                     <div class="col-1">
-                                        <p>#{{product.product_id}}</p>
+                                        <p>#{{product.product_id.product_id}}</p>
                                     </div>
 
                                     <!-- Product info row -->
                                     <div class="col-md-9 col-11">
                                         <div class="row">
-                                            <div class="col-md-7 col-6 pd-info">
-                                                <p class="font-weight-bold">{{product.pd.product_name}}</p>
-                                                <p>Price each: <span class="text-info">{{product.pd.sell_price}}</span></p>
-                                                <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
+                                            <div class="col-md-7 col-6.product_id.info">
+                                                <p class="font-weight-bold">{{product.product_id.product_name}}</p>
+                                                <p>Price each: <span class="text-info">{{product.product_id.sell_price}}</span></p>
+                                                <a href="/products/viewproduct/{{product.product_id.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
                                             </div>
                                             <!-- Quantity & Price -->
-                                            <div class="col-md-5 col-6 pd-price">
+                                            <div class="col-md-5 col-6.product_id.price">
                                                 <p>Quantity: <span class="text-primary font-weight-bold">{{product.quantity}}</span></p>
-                                                <p>Total: <span class="text-info font-weight-bold">{{product.quantity|mul:product.pd.sell_price}}</span></p>
+                                                <p>Total: <span class="text-info font-weight-bold">{{product.quantity|mul:product.product_id.sell_price}}</span></p>
                                             </div>
                                         </div>
                                     </div>
@@ -57,15 +57,21 @@
                     <div class="col-md-3 ml-md-2 col-12 order-price rounded rounded-lg">
                         <div class="col-12 card">
                             <div class="card-body">
-                                {% if shipped %}
-                                    <h5 class="card-title font-weight-bold h4">Status: <span class="text-success">Shipped</span></h5>
-                                {% else %}
-                                    <h5 class="card-title font-weight-bold h4">Status: <span class="text-danger">Pending</span></h5>
+                                {% if status == 'Confirmed' %}
+                                    <h5 class="card-title font-weight-bold h4">Status: <span class="text-success">Confirmed</span></h5>
+                                {% elif status == 'Pending' %}
+                                    <h5 class="card-title font-weight-bold h4">Status: <span class="text-warning">Pending</span></h5>
+                                {% elif status == 'Canceled' %}
+                                    <h5 class="card-title font-weight-bold h4">Status: <span class="text-danger">Canceled</span></h5>
                                 {% endif %}
                                 <hr class="my-4">
                                 <p class="card-text text-right">Total Price: <span class="text-danger h3">{{total}}</span></p>
-                                {% if not shipped %}
-                                    <a href="/admin/orders/change_status/{{id}}" class="btn btn-info float-right">Confirm <i class="fas fa-check"></i></a>
+                                {% if status == 'Pending' %}
+                                    {% if user.is_superuser %}
+                                        <a href="/admin/orders/change_status/{{id}}" class="btn btn-info float-right">Confirm <i class="fas fa-check"></i></a>
+                                    {% elif user.is_authenticated %}
+                                        <a href="/products/orders/cancel/{{id}}" class="btn btn-danger float-right">Cancel <i class="fas fa-times"></i></a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
