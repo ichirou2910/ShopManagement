@@ -32,29 +32,27 @@
                             {# If there isn't any left, display Sold Out rather than Add to cart #}
                             {% if product.quantity_in_stock %}
                                 <p class="card-text">{{product.quantity_in_stock}} in stock</p>
-                                {% if not user.is_superuser %}
-                                    {% if user.is_authenticated %}
-                                        <button type="button" class="btn btn-danger" data-containter="body" data-toggle="popover" data-placement="top" data-html="true" data-title="Amount:"
-                                            data-content='<div id="popover-content">
-                                                <form method="POST" action="/products/{{product.product_id}}/">
-                                                    {% csrf_token %}
-                                                    <input type="number" class="border-danger" name="quantity" min="0" max="{{product.quantity_in_stock}}" style="width: 65px;" required>
-                                                    <button class="btn btn-info">Add</button>
-                                                </form>
-                                            </div>'>
-                                            Add to cart <i class="fas fa-cart-plus"></i></button>
-                                        {% if quantity %}
-                                        <a href="/products/cart" class="btn btn-info m-0"><span class="text-danger font-weight-bold">{{quantity}}</span> in cart <i class="fas fa-shopping-cart"></i></a>
-                                        {% endif %}
-                                
-                                    {% else %}
-                                        <a href="/accounts/login?next={{request.path}}" class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></a>
+                                {% if user.is_authenticated and not user.is_superuser%}
+                                    <button type="button" class="btn btn-danger" data-containter="body" data-toggle="popover" data-placement="top" data-html="true" data-title="Amount:"
+                                        data-content='<div id="popover-content">
+                                            <form method="POST" action="/products/{{product.product_id}}/">
+                                                {% csrf_token %}
+                                                <input type="number" class="border-danger" name="quantity" min="0" max="{{product.quantity_in_stock}}" style="width: 65px;" required>
+                                                <button class="btn btn-info">Add</button>
+                                            </form>
+                                        </div>'>
+                                        Add to cart <i class="fas fa-cart-plus"></i></button>
+                                    {% if quantity %}
+                                    <a href="/products/cart" class="btn btn-info m-0"><span class="text-danger font-weight-bold">{{quantity}}</span> in cart <i class="fas fa-shopping-cart"></i></a>
                                     {% endif %}
-                                {% else %}
-                                    <a href="/admin/products/{{product.product_id}}" class="btn btn-warning">Manage <i class="fas fa-tasks fa-fw"></i></a>
+                            
+                                    <a href="/accounts/login?next={{request.path}}" class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></a>
                                 {% endif %}
                             {% else %}
                                 <a class="btn btn-secondary disabled" href="#" aria-disabled="true">Sold out</a>
+                            {% endif %}
+                            {% if user.is_superuser %}
+                                <a href="/admin/products/{{product.product_id}}" class="btn btn-warning">Manage <i class="fas fa-tasks fa-fw"></i></a>
                             {% endif %}
                             <p class="card-text">{{product.description}}</p>
                         </div>
