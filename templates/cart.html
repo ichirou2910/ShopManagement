@@ -32,8 +32,8 @@
                                     <!-- Product image row -->
                                     <div class="col-md-2 col-12 text-center">
                                         {# Use default image if product image not provided #}
-                                        {% if product.product_image %}
-                                            <img src="{{product.product_image}}" class="img-thumbnail img-responsive" alt="...">
+                                        {% if product.pd.product_image %}
+                                            <img src="{{product.pd.product_image}}" class="img-thumbnail img-responsive" alt="...">
                                         {% else %}
                                             <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail img-responsive" alt="...">
                                         {% endif %}
@@ -47,15 +47,15 @@
                                     <div class="col-md-9 col-11">
                                         <div class="row">
                                             <div class="col-md-7 col-6 pd-info">
-                                                <p class="font-weight-bold">{{product.product_name}}</p>
-                                                <p>Price each: <span class="text-info">{{product.price}}</span></p>
+                                                <p class="font-weight-bold">{{product.pd.product_name}}</p>
+                                                <p>Price each: <span class="text-info">{{product.pd.sell_price}}</span></p>
                                                 <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
                                                 <a href="/products/cart/{{product.product_id}}" class="btn btn-danger">Delete <i class="fas fa-trash-alt"></i></a>
                                             </div>
                                             <!-- Quantity & Price -->
                                             <div class="col-md-5 col-6 pd-price">
                                                 <p>Quantity: <span class="text-primary font-weight-bold">{{product.quantity}}</span></p>
-                                                <p>Total: <span class="text-info font-weight-bold">{{product.quantity|mul:product.price}}</span></p>
+                                                <p>Total: <span class="text-info font-weight-bold">{{product.quantity|mul:product.pd.sell_price}}</span></p>
                                             </div>
                                         </div>
                                     </div>
