@@ -50,7 +50,8 @@
                                     {% else %}
                                         <a href="/accounts/login?next={{request.path}}" class="btn btn-danger">Add to cart <i class="fas fa-cart-plus"></i></a>
                                     {% endif %}
-                                    
+                                {% else %}
+                                    <a href="/admin/products/{{product.product_id}}" class="btn btn-warning">Manage <i class="fas fa-tasks fa-fw"></i></a>
                                 {% endif %}
                             {% else %}
                                 <a class="btn btn-secondary disabled" href="#" aria-disabled="true">Sold out</a>

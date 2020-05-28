@@ -21,28 +21,41 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
                 </li>
+
+                {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        <li class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Welcome, <span class="text-info">Admin</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item text-warning" href="/products"><i class="fas fa-tasks fa-fw"></i> Products</a>
+                                <a class="dropdown-item text-warning" href="/products/orders"><i class="fas fa-tasks fa-fw"></i> Orders</a>
+                                <a class="dropdown-item text-danger" href="/accounts/logout?next=/"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
+                            </div>
+                        </li>
+                        <a href="/admin/products/add" class="btn btn-warning"><i class="fas fa-plus"></i> Add Product</a>
+                    {% else %}
+                    <li class="text-primary nav-item">
+                        <a class="nav-link" href="/products">Products</a>
+                    </li>
+               
+                    <li class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Hello, <span class="text-info">{{user.username}}</span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item text-danger" href="/accounts/logout?next=/"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
+                            <a class="dropdown-item" href="/products/cart"><i class="fas fa-shopping-cart fa-fw"></i> View cart</a>
+                            <a class="dropdown-item" href="/products/orders"><i class="fas fa-scroll fa-fw"></i> View orders</a>
+                        </div>
+                    </li>
+                    {% endif %}
+                {% else %}
                 <li class="text-primary nav-item">
                     <a class="nav-link" href="/products">Products</a>
                 </li>
-
-                {% if user.is_superuser %}
-                <li class="text-primary nav-item">
-                    <a class="nav-link" href="/admin">Admin</a>
-                </li>
-                {% endif %}
-
-                {% if user.is_authenticated %}
-                <li class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Hello, <span class="text-info">{{user.username}}</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item text-danger" href="/accounts/logout?next={{request.path}}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
-                        <a class="dropdown-item" href="/products/cart"><i class="fas fa-shopping-cart fa-fw"></i> View cart</a>
-                        <a class="dropdown-item" href="/products/orders"><i class="fas fa-scroll"></i> View orders</a>
-                    </div>
-                </li>
-                {% else %}
+                
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Account

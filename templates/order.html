@@ -45,6 +45,9 @@
                                     <!-- ID row -->
                                     <div class="col-md-1 col-4">
                                         <p class="text-center">#{{order.order_id}}</p>
+                                        {% if user.is_superuser%}
+                                            <a class="btn btn-primary" href="/admin/orders/details/{{order.order_id}}">Details</a>
+                                        {% endif %}
                                     </div>
 
                                     <div class="col-md-3 col-8 border-left border-dark">
@@ -64,6 +67,10 @@
                                         <p class="text-center text-success">Shipped</p>
                                         {% else %}
                                         <p class="text-center text-danger">Pending</p>
+                                        {% endif %}
+                                        
+                                        {% if user.is_superuser%}
+                                            <a class="btn btn-primary" href="/admin/orders/change_status/{{order.order_id}}">Change</a>
                                         {% endif %}
                                     </div>
                                 </div>
