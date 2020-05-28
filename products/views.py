@@ -48,7 +48,7 @@ def product_details(request, pid):
     if in_cart:
         quantity = in_cart.get(product_id=pid).get('quantity')
     product = Product.objects.get(product_id=pid)
-    return render(request, 'details.html', {'product': product, 'quantity': quantity})
+    return render(request, 'product_details.html', {'product': product, 'quantity': quantity})
 
 
 def cart_add(request, pid):
