@@ -3,10 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('products/', views.product, name='product'),
     path('products/add/', views.product_add, name='product_add'),
     path('products/accept_add/', views.product_accept_add, name='product_accept_add'),
-    path('orders/', views.order, name='order'),
 
     # Don't move these
     path('products/<str:pid>/', views.product_change, name='product_change'),

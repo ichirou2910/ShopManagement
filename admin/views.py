@@ -7,12 +7,6 @@ from products.models import Product, OrderDJ, OrderDetailsDJ
 
 
 ### Admin's product functions ###
-def product(request):
-    if request.user.is_superuser:
-        pds = Product.objects.all()
-        return render(request, 'admin_product.html', {'products': pds})
-    return HttpResponse("You don't have permission to view this page")
-
 
 def product_change(request, pid):
     if request.user.is_superuser:
@@ -70,7 +64,7 @@ def product_accept_change(request, pid):
                 product.sell_price = price
                 product.save(update_fields=["sell_price"])
 
-        return redirect('/admin/products')
+        return redirect('/products')
     return HttpResponse("You don't have permission to view this page")
 
 
@@ -96,17 +90,11 @@ def product_accept_add(request):
 
 
 ### Admin's order functions ###
-def order(request):
-    if request.user.is_superuser:
-        orders_list = OrderDJ.objects.all()
-
-        return render(request, 'admin_order.html', {'orders': orders_list})
-    return HttpResponse("You don't have permission to view this page")
-
 
 def status_change(request, oid):
     if request.user.is_superuser:
         order = OrderDJ.objects.get(order_id=oid)
+        print("OID= " + oid)
 
         if order.shipped is False:
             order.shipped = True

@@ -11,7 +11,7 @@ from .models import Product, Cart, OrderDJ, OrderDetailsDJ
 
 def home(request):
     """ Render product page """
-    pds = Product.objects.all()
+    pds = Product.objects.all().order_by('product_id')
     return render(request, 'product.html', {'products': pds, 'count': pds.count()})
 
 
@@ -126,7 +126,7 @@ def orders(request):
         if request.user.is_superuser:
             orders_list = OrderDJ.objects.order_by('order_id')
         else:
-            orders_list = OrderDJ.objects.filter(user=request.user.username)
+            orders_list = OrderDJ.objects.filter(user=request.user.username).order_by('order_id')
         return render(request, 'order.html', {'orders': orders_list})
     return HttpResponse("You don't have permission to view this page")
 
