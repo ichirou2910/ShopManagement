@@ -124,7 +124,7 @@ def cart_get(request):
 def orders(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            orders_list = OrderDJ.objects.all()
+            orders_list = OrderDJ.objects.order_by('order_id')
         else:
             orders_list = OrderDJ.objects.filter(user=request.user.username)
         return render(request, 'order.html', {'orders': orders_list})
@@ -164,7 +164,7 @@ def checkout(request):
 
             for item in cart:
                 # Add to order table
-                order_detail = OrderDetailsDJ(order_id=order, product_id=item.get('product_id'), user=item.get('user'), quantity=item.get('quantity'), price=item.get('price'))
+                order_detail = OrderDetailsDJ(order_id=order, product_id=item.get('product_id'), user=item.get('user'), quantity=item.get('quantity'), price=item.get('price'), pd=Product.objects.get(product_id=item.get('product_id')))
                 order_detail.save()
                 # Decrease quantity in stock
                 product = products.get(product_id=item.get('product_id'))

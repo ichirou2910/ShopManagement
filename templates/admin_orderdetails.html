@@ -17,61 +17,59 @@
 
             <section id="products_list">
                 <div class="row justify-content-center my-5">
-                    <div class="col-12">
-                        {% if details %}
-                            <div class="row order-title my-2 p-2 rounded rounded-lg">
-                                <div class="col-md-1 col-4">
-                                    <p class="text-center text-light font-weight-bold">ID</p>
-                                </div>
-
-                                <div class="col-md-3 col-8 border-left">
-                                    <p class="text-center text-light font-weight-bold">Product ID</p>
-                                </div>
-                                
-                                <div class="col-md-5 col-12 border-left">
-                                    <p class="text-center text-light font-weight-bold">User</p>
-                                </div>
-
-                                <div class="col-md-2 col-6 border-left">
-                                    <p class="text-center text-light font-weight-bold">Quantity</p>
-                                </div>
-
-                                <div class="col-md-1 col-6 border-left">
-                                    <p class="text-center text-light font-weight-bold">Price</p>
-                                </div>
-                            </div>
-                            {% for order in details %}
+                    <div class="col-md-8 col-12">
+                        <form class="cart" action="">
+                            {% for product in details %}
                                 <div class="row order-item my-1 p-2 rounded rounded-lg">
+                                    <!-- Product image row -->
+                                    <div class="col-md-2 col-12 text-center">
+                                        {# Use default image if product image not provided #}
+                                        {% if product.pd.product_image %}
+                                            <img src="{{product.pd.product_image}}" class="img-thumbnail img-responsive" alt="...">
+                                        {% else %}
+                                            <img src="https://i.imgur.com/l8lNhIC.jpg" class="img-thumbnail img-responsive" alt="...">
+                                        {% endif %}
+                                    </div>
                                     <!-- ID row -->
-                                    <div class="col-md-1 col-4">
-                                        <p class="text-center">#{{order.id}}</p>
+                                    <div class="col-1">
+                                        <p>#{{product.product_id}}</p>
                                     </div>
 
-                                    <div class="col-md-3 col-8 border-left border-dark">
-                                        <a href="/products/viewproduct/{{order.product_id}}">{{order.product_id}}</a>
-                                    </div>
-                                    
-                                    <div class="col-md-5 col-12 border-left border-dark">
-                                        <p>{{order.user}}</p>
-                                    </div>
-
-                                    <div class="col-md-2 col-6 border-left border-dark">
-                                        <p class="text-center">{{order.quantity}}</p>
-                                    </div>
-
-                                    <div class="col-md-1 col-6 border-left">
-                                        <p class="text-center">{{order.quantity|mul:order.price}}</p>
+                                    <!-- Product info row -->
+                                    <div class="col-md-9 col-11">
+                                        <div class="row">
+                                            <div class="col-md-7 col-6 pd-info">
+                                                <p class="font-weight-bold">{{product.pd.product_name}}</p>
+                                                <p>Price each: <span class="text-info">{{product.pd.sell_price}}</span></p>
+                                                <a href="/products/viewproduct/{{product.product_id}}" class="btn btn-primary">Details <i class="fas fa-info-circle"></i></a>
+                                                <a href="/products/cart/{{product.product_id}}" class="btn btn-danger">Delete <i class="fas fa-trash-alt"></i></a>
+                                            </div>
+                                            <!-- Quantity & Price -->
+                                            <div class="col-md-5 col-6 pd-price">
+                                                <p>Quantity: <span class="text-primary font-weight-bold">{{product.quantity}}</span></p>
+                                                <p>Total: <span class="text-info font-weight-bold">{{product.quantity|mul:product.pd.sell_price}}</span></p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             {% endfor %}
-                        {% else %}
-                            <div class="row justify-content-center my-5">
-                                <div class="col-md-8 col-12 bg-danger rounded rounded-lg">
-                                    <p class="text-light m-2"><i class="fas fa-exclamation-circle"></i>
-                                        You don't have any order yet!</p>
-                                </div>
+                        </form>
+                    </div>
+                    <div class="col-md-3 ml-md-2 col-12 order-price rounded rounded-lg">
+                        <div class="col-12 card">
+                            <div class="card-body">
+                                {% if shipped %}
+                                    <h5 class="card-title font-weight-bold h4">Status: <span class="text-success">Shipped</span></h5>
+                                {% else %}
+                                    <h5 class="card-title font-weight-bold h4">Status: <span class="text-danger">Pending</span></h5>
+                                {% endif %}
+                                <hr class="my-4">
+                                <p class="card-text text-right">Total Price: <span class="text-danger h3">{{total}}</span></p>
+                                {% if not shipped %}
+                                    <a href="/admin/orders/change_status/{{id}}" class="btn btn-info float-right">Confirm <i class="fas fa-check"></i></a>
+                                {% endif %}
                             </div>
-                        {% endif %}
+                        </div>
                     </div>
                 </div>
             </section>

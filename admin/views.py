@@ -109,20 +109,19 @@ def status_change(request, oid):
         order = OrderDJ.objects.get(order_id=oid)
 
         if order.shipped is False:
-            order.shipped is True
-            print("It's false->true")
+            order.shipped = True
         else:
             order.shipped = False
-            print("It's true->false")
 
         order.save(update_fields=["shipped"])
-        return redirect('/admin/orders')
+        return redirect('/products/orders')
     return HttpResponse("You don't have permission to view this page")
 
 
 def details(request, oid):
     if request.user.is_superuser:
-        order_details = OrderDetailsDJ.objects.filter(order_id=oid)
+        order = OrderDJ.objects.get(order_id=oid)
+        order_details = OrderDetailsDJ.objects.filter(order_id=oid).select_related('pd')
 
-        return render(request, 'admin_orderdetails.html', {'details': order_details})
+        return render(request, 'admin_orderdetails.html', {'id': oid, 'shipped': order.shipped, 'details': order_details, 'total': order.total_price})
     return HttpResponse("You don't have permission to view this page")

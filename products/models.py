@@ -53,6 +53,7 @@ class OrderDetailsDJ(models.Model):
     user = models.CharField(db_column='user', max_length=25)
     quantity = models.IntegerField(db_column='quantity')
     price = models.IntegerField(db_column='sellPrice')
+    pd = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = (('order_id', 'product_id'),)
