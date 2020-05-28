@@ -24,17 +24,15 @@ class Product(models.Model):
 class Cart(models.Model):
     ord = models.AutoField(db_column='ord', primary_key=True)
     product_id = models.CharField(db_column='productID', max_length=10)
-    product_name = models.CharField(db_column='productName', max_length=25)
-    product_image = models.CharField(db_column='productImage', max_length=100, blank=True)
     quantity = models.IntegerField(db_column='quantity')
-    price = models.IntegerField(db_column='sellPrice', default=0)
     user = models.CharField(db_column='user', max_length=25)
+    pd = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = 'cart'
 
 
-class OrderDJ(models.Model):
+class Orders(models.Model):
     order_id = models.AutoField(db_column='orderID', primary_key=True)
     user = models.CharField(db_column='user', default='noname', max_length=25)
     customer_name = models.CharField(db_column='customerName', default='noname', max_length=25)
@@ -44,17 +42,16 @@ class OrderDJ(models.Model):
     shipped = models.BooleanField(db_column='shipped', default=False)
 
     class Meta:
-        db_table = 'orderDJ'
+        db_table = 'orders'
 
 
-class OrderDetailsDJ(models.Model):
-    order_id = models.ForeignKey('OrderDJ', on_delete=models.CASCADE, db_column='order_id')
+class OrderDetails(models.Model):
+    order_id = models.ForeignKey('Orders', on_delete=models.CASCADE, db_column='order_id')
     product_id = models.CharField(db_column='productID', max_length=10)
     user = models.CharField(db_column='user', max_length=25)
     quantity = models.IntegerField(db_column='quantity')
-    price = models.IntegerField(db_column='sellPrice')
     pd = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = (('order_id', 'product_id'),)
-        db_table = 'orderDetailsDJ'
+        db_table = 'orderdetails'

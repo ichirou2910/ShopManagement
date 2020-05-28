@@ -3,8 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Sum, Q
 from django.http import HttpResponse
-# from django.contrib.auth.models import User
-from .models import Product, Cart, OrderDJ, OrderDetailsDJ
+from .models import Product, Cart, Orders, OrderDetails
 
 # Create your views here.
 
@@ -70,24 +69,28 @@ def product_cart(request, pid):
         user = "none"
 
     product_get = Product.objects.get(product_id=pid)
-    product_id = product_get.product_id
-    product_name = product_get.product_name
-    product_image = product_get.product_image
     product_stock = product_get.quantity_in_stock
-    price = product_get.sell_price
 
-    in_cart = Cart.objects.filter(user=request.user.username, product_id=pid).values('product_id', 'user').annotate(quantity=Sum('quantity'))
+    in_cart = Cart.objects.filter(user=request.user.username, product_id=pid)
     cart_quantity = 0
     if in_cart:
-        cart_quantity = in_cart.get(product_id=pid).get('quantity')
+        cart_quantity = in_cart.get(product_id=pid).quantity
+        print(cart_quantity)
 
     if quantity != 0 and user != "none":
         if int(quantity) + cart_quantity > product_stock:
             messages.add_message(request, messages.INFO, "Heyyyy! You know we do not have that many right?")
         else:
             messages.add_message(request, messages.INFO, 'You have added a product to your cart!')
-            product_in = Cart(product_id=product_id, product_name=product_name, product_image=product_image, quantity=quantity, price=price, user=user)
-            product_in.save()
+            product_temp = Cart.objects.filter(user=request.user.username, product_id=pid)
+            if product_temp:
+                pd = product_temp.get(product_id=pid)
+                pd.quantity = int(quantity) + cart_quantity
+                pd.save(update_fields=['quantity'])
+            else:
+                print('Product not found. Creating new.')
+                product_new = Cart(product_id=pid, pd=Product.objects.get(product_id=pid), quantity=quantity, user=user)
+                product_new.save()
     else:
         messages.add_message(request, messages.INFO, 'Oops!')
 
@@ -97,36 +100,31 @@ def product_cart(request, pid):
 def cart_get(request):
     if request.user.is_superuser:
         return redirect('/admin/orders')
-    cart = Cart.objects.filter(user=request.user.username).values('product_id', 'product_name', 'product_image', 'price', 'user').annotate(quantity=Sum('quantity'))
+    cart = Cart.objects.filter(user=request.user.username).select_related('pd')
     stock_changed = False
+    total_price = 0
     for item in cart:
-        in_stock = Product.objects.get(product_id=item.get('product_id')).quantity_in_stock
+        in_stock = Product.objects.get(product_id=item.product_id).quantity_in_stock
         # If empty stock, remove entry from cart
         if in_stock == 0:
-            Cart.objects.filter(user=request.user.username, product_id=item.get('product_id')).delete()
+            Cart.objects.filter(user=request.user.username, product_id=item.product_id).delete()
             stock_changed = True
         # Else, change the quantity of that entry in cart
-        elif item.get('quantity') > in_stock:
-            Cart.objects.filter(user=request.user.username, product_id=item.get('product_id')).update(quantity=in_stock)
+        elif item.quantity > in_stock:
+            Cart.objects.filter(user=request.user.username, product_id=item.product_id).update(quantity=in_stock)
             stock_changed = True
 
-    # EDIT: Now print message directly in cart page based on stock_changed
-    # Notify if there are changes in cart
-    # if stock_changed:
-    #     messages.add_message(request, messages.INFO, 'Stock has fewer amount than some of the products in your cart! Please refresh the page to update the changes!')
+        total_price += Product.objects.get(product_id=item.product_id).sell_price * item.quantity
 
-    total_price = 0
-    for cart_data in cart:
-        total_price += cart_data.get('price') * cart_data.get('quantity')
-    return render(request, 'cart.html', {'cart': cart, 'total': total_price, 'changed': stock_changed})
+    return render(request, 'cart.html', {'cart': cart, 'changed': stock_changed, 'total': total_price})
 
 
 def orders(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            orders_list = OrderDJ.objects.order_by('order_id')
+            orders_list = Orders.objects.order_by('order_id')
         else:
-            orders_list = OrderDJ.objects.filter(user=request.user.username).order_by('order_id')
+            orders_list = Orders.objects.filter(user=request.user.username).order_by('order_id')
         return render(request, 'order.html', {'orders': orders_list})
     return HttpResponse("You don't have permission to view this page")
 
@@ -138,11 +136,11 @@ def checkout(request):
     storage = messages.get_messages(request)
     storage.used = True
 
-    cart = Cart.objects.filter(user=request.user.username).values('product_id', 'product_name', 'product_image', 'price', 'user').annotate(quantity=Sum('quantity'))
+    cart = Cart.objects.filter(user=request.user.username).select_related('pd')
     products = Product.objects.all()
     total_price = 0
-    for cart_data in cart:
-        total_price += cart_data.get('price') * cart_data.get('quantity')
+    for item in cart:
+        total_price += item.pd.sell_price * item.quantity
 
     if request.method == 'POST':
         name = request.POST['name']
@@ -155,21 +153,20 @@ def checkout(request):
 
     if name and address:
         # Create an order
-        order = OrderDJ(user=request.user.username, customer_name=name, address=address, phone_number=phone, total_price=total_price)
+        order = Orders(user=request.user.username, customer_name=name, address=address, phone_number=phone, total_price=total_price)
 
         # If success, create orderdetail
         if order:
             order.save()
-            messages.add_message(request, messages.INFO, 'Order accepted! Wait for your delivery!')
+            messages.add_message(request, messages.INFO, 'Orders accepted! Wait for your delivery!')
 
             for item in cart:
                 # Add to order table
-                order_detail = OrderDetailsDJ(order_id=order, product_id=item.get('product_id'), user=item.get('user'), quantity=item.get('quantity'), price=item.get('price'), pd=Product.objects.get(product_id=item.get('product_id')))
+                order_detail = OrderDetails(order_id=order, product_id=item.product_id, user=item.user, quantity=item.quantity, pd=Product.objects.get(product_id=item.product_id))
                 order_detail.save()
                 # Decrease quantity in stock
-                product = products.get(product_id=item.get('product_id'))
-                stock_left = product.quantity_in_stock - item.get('quantity')
-                product.quantity_in_stock = stock_left
+                product = products.get(product_id=item.product_id)
+                product.quantity_in_stock = product.quantity_in_stock - item.quantity
                 product.save(update_fields=['quantity_in_stock'])
 
             # Empty your cart
