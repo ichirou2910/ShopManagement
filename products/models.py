@@ -23,10 +23,9 @@ class Product(models.Model):
 
 class Cart(models.Model):
     ord = models.AutoField(db_column='ord', primary_key=True)
-    product_id = models.CharField(db_column='productID', max_length=10)
     quantity = models.IntegerField(db_column='quantity')
     user = models.CharField(db_column='user', max_length=25)
-    pd = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
+    product_id = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = 'cart'
@@ -39,7 +38,7 @@ class Orders(models.Model):
     address = models.CharField(db_column='address', default='nonexistent', max_length=100)
     phone_number = models.CharField(db_column='phoneNumber', default='0000000000', max_length=15)
     total_price = models.IntegerField(db_column='totalPrice', default=0)
-    shipped = models.BooleanField(db_column='shipped', default=False)
+    status = models.CharField(db_column='status', max_length=10, default='Pending')
 
     class Meta:
         db_table = 'orders'
@@ -47,10 +46,9 @@ class Orders(models.Model):
 
 class OrderDetails(models.Model):
     order_id = models.ForeignKey('Orders', on_delete=models.CASCADE, db_column='order_id')
-    product_id = models.CharField(db_column='productID', max_length=10)
     user = models.CharField(db_column='user', max_length=25)
     quantity = models.IntegerField(db_column='quantity')
-    pd = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
+    product_id = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = (('order_id', 'product_id'),)
