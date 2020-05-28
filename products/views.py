@@ -2,10 +2,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Sum, Q
+from django.http import HttpResponse
 # from django.contrib.auth.models import User
 from .models import Product, Cart, OrderDJ, OrderDetailsDJ
 
 # Create your views here.
+
 
 def home(request):
     """ Render product page """
@@ -51,6 +53,8 @@ def product_details(request, pid):
 
 
 def product_cart(request, pid):
+    if request.user.is_superuser:
+        return redirect('/admin/orders')
     # delete old messages
     storage = messages.get_messages(request)
     storage.used = True
@@ -91,6 +95,8 @@ def product_cart(request, pid):
 
 
 def cart_get(request):
+    if request.user.is_superuser:
+        return redirect('/admin/orders')
     cart = Cart.objects.filter(user=request.user.username).values('product_id', 'product_name', 'product_image', 'price', 'user').annotate(quantity=Sum('quantity'))
     stock_changed = False
     for item in cart:
@@ -116,12 +122,18 @@ def cart_get(request):
 
 
 def orders(request):
-    orders_list = OrderDJ.objects.filter(user=request.user.username)
-
-    return render(request, 'order.html', {'orders': orders_list})
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            orders_list = OrderDJ.objects.all()
+        else:
+            orders_list = OrderDJ.objects.filter(user=request.user.username)
+        return render(request, 'order.html', {'orders': orders_list})
+    return HttpResponse("You don't have permission to view this page")
 
 
 def checkout(request):
+    if request.user.is_superuser:
+        return redirect('/admin/orders')
     # delete old messages
     storage = messages.get_messages(request)
     storage.used = True
@@ -169,5 +181,7 @@ def checkout(request):
 
 
 def delete_cart(request, pid):
+    if request.user.is_superuser:
+        return redirect('/admin/orders')
     Cart.objects.filter(user=request.user.username, product_id=pid).delete()
     return redirect('/products/cart')
