@@ -110,8 +110,8 @@ def order_status_change(request, oid):
 def order_filter(request):
     if request.user.is_superuser:
         order = Orders.objects.all()
-        if 'filter' in request.GET:
-            status = request.GET["filter"]
+        if 'status' in request.GET:
+            status = request.GET["status"]
             if status == 'confirmed':
                 order = order.filter(status="Confirmed")
             elif status == 'pending':
