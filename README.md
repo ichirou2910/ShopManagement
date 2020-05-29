@@ -10,11 +10,13 @@
 - Được thiết kế đơn giản gọn nhẹ nhưng đầy đủ chức năng để mang sự tiện lợi cho cả người bán lẫn người mua.
 - Giao dịch với khách hàng, tạo ra hoá đơn thanh toán cho cả khách hàng lẫn người bán, không hỗ trợ giao dịch trực truyến
  
-### Admin user cho thầy đăng nhập:
-- Tên: admin
+### User cho thầy đăng nhập:
+- Username: thevsd27
+- Pass: 123
+### Admin cho thầy đăng nhập để quản lí:
+- Username: admin
 - Pass: admin
-- Thầy có thể truy cập đường link này để vào trang admin, điều chỉnh dữ liệu trong CSDL:
-https://shoesvendor.herokuapp.com/admin
+- Sau khi đăng nhập, thầy có thể bấm vào "Welcome, Admin" để hiển thị các mục có thể quản lí
 
 ## Chức năng
 -------------
