@@ -8,9 +8,12 @@
 {% endblock %}
 
 {% block content %}
-        <!-- Clear all input choice if enter products/ (without filter request) -->
+        <!-- Clear input choice if enter products/ (without filter request) -->
         {% if request.path == '/products/' %}
-            <script>localStorage.clear();</script>
+            <script>
+                localStorage.removeItem("filter");
+                localStorage.removeItem("sort");
+            </script>
         {% endif %}
 
         <div class="container-fluid mt-5 pt-3">

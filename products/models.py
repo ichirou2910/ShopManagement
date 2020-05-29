@@ -9,13 +9,13 @@ from django.db import models
 
 
 class Product(models.Model):
-    product_id = models.CharField(db_column='productID', primary_key=True, max_length=10)  # Field name made lowercase.
-    product_name = models.CharField(db_column='productName', max_length=25)  # Field name made lowercase.
-    product_image = models.CharField(db_column='productImage', max_length=100, blank=True)  # Field name made lowercase.
+    product_id = models.CharField(db_column='product_id', primary_key=True, max_length=10)  # Field name made lowercase.
+    product_name = models.CharField(db_column='product_name', max_length=25)  # Field name made lowercase.
+    product_image = models.CharField(db_column='product_image', max_length=100, blank=True)  # Field name made lowercase.
     company = models.CharField(max_length=25)
-    product_description = models.TextField(db_column='productDescription')  # Field name made lowercase.
-    quantity_in_stock = models.IntegerField(db_column='quantityInStock')  # Field name made lowercase.
-    sell_price = models.IntegerField(db_column='sellPrice')  # Field name made lowercase.
+    product_description = models.TextField(db_column='product_description')  # Field name made lowercase.
+    quantity_in_stock = models.IntegerField(db_column='quantity_in_stock')  # Field name made lowercase.
+    sell_price = models.IntegerField(db_column='sell_price')  # Field name made lowercase.
 
     class Meta:
         db_table = 'products'
@@ -25,19 +25,19 @@ class Cart(models.Model):
     ord = models.AutoField(db_column='ord', primary_key=True)
     quantity = models.IntegerField(db_column='quantity')
     user = models.CharField(db_column='user', max_length=25)
-    product_id = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
+    product_id = models.ForeignKey('Product', on_delete=models.CASCADE, null=True, db_column='product_id')
 
     class Meta:
         db_table = 'cart'
 
 
 class Orders(models.Model):
-    order_id = models.AutoField(db_column='orderID', primary_key=True)
+    order_id = models.AutoField(db_column='order_id', primary_key=True)
     user = models.CharField(db_column='user', default='noname', max_length=25)
-    customer_name = models.CharField(db_column='customerName', default='noname', max_length=25)
+    customer_name = models.CharField(db_column='customer_name', default='noname', max_length=25)
     address = models.CharField(db_column='address', default='nonexistent', max_length=100)
-    phone_number = models.CharField(db_column='phoneNumber', default='0000000000', max_length=15)
-    total_price = models.IntegerField(db_column='totalPrice', default=0)
+    phone_number = models.CharField(db_column='phone_number', default='0000000000', max_length=15)
+    total_price = models.IntegerField(db_column='total_price', default=0)
     status = models.CharField(db_column='status', max_length=10, default='Pending')
 
     class Meta:
@@ -48,7 +48,7 @@ class OrderDetails(models.Model):
     order_id = models.ForeignKey('Orders', on_delete=models.CASCADE, db_column='order_id')
     user = models.CharField(db_column='user', max_length=25)
     quantity = models.IntegerField(db_column='quantity')
-    product_id = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
+    product_id = models.ForeignKey('Product', on_delete=models.CASCADE, null=True, db_column='product_id')
 
     class Meta:
         unique_together = (('order_id', 'product_id'),)

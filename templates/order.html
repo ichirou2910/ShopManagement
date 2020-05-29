@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block content %}
+        <!-- Clear input choice if enter products/orders/ (without filter request) -->
+        {% if request.path == '/products/orders/' %}
+            <script>localStorage.removeItem("status");</script>
+        {% endif %}
+
         <div class="container-fluid mt-5 pt-3">
             <section id="header">
                 <h1 class="text-light pl-5">Orders <i class="fas fa-scroll"></i></h1>
@@ -17,14 +22,14 @@
 
             <section id="products_filter">
                 <div class="row mx-5 my-2 rounded rounded-lg">
-                    <form id="advanced-filter" class="form-inline my-2 my-lg-0" action="/admin/filter">
+                    <form id="advanced-filter" class="form-inline my-2 my-lg-0" action="/admin/orders/filter">
             
                         <div id="filter" class="form-group bg-success text-light mx-2 p-2 rounded rounded-lg">
-                            <label for="filter" class="font-weight-bold mx-sm-2"><span class="text-dark">Filter: </span></label>
-                            <input id="filter0" class="form-control mx-sm-2" type="radio" name="filter" value=" ">None
-                            <input id="filter1" class="form-control mx-sm-2" type="radio" name="filter" value="confirmed">Confirmed
-                            <input id="filter2" class="form-control mx-sm-2" type="radio" name="filter" value="pending">Pending
-                            <input id="filter2" class="form-control mx-sm-2" type="radio" name="filter" value="cancelled">Cancelled
+                            <label for="status" class="font-weight-bold mx-sm-2"><span class="text-dark">Filter: </span></label>
+                            <input id="status0" class="form-control mx-sm-2" type="radio" name="status" value="">None
+                            <input id="status1" class="form-control mx-sm-2" type="radio" name="status" value="confirmed">Confirmed
+                            <input id="status2" class="form-control mx-sm-2" type="radio" name="status" value="pending">Pending
+                            <input id="status3" class="form-control mx-sm-2" type="radio" name="status" value="cancelled">Cancelled
                         </div>
                         
                         <button class="btn btn-warning m-sm-2" type="submit"><i class="fas fa-filter fa-fw"></i> Apply</button></a>
@@ -110,12 +115,12 @@
 
 {% block script_extend %}
         // Persistent filter status after submit
-        $('input[name="filter"]').on('change', function(){
-            localStorage.setItem('filter', this.id);
+        $('input[name="status"]').on('change', function(){
+            localStorage.setItem('status', this.id);
         });
     
-        if(localStorage.getItem("filter") !== null){
-            var id = localStorage.getItem("filter");
+        if(localStorage.getItem("status") !== null){
+            var id = localStorage.getItem("status");
             $('#'+id).prop('checked', true);
         }
         
