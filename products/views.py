@@ -190,7 +190,6 @@ def order_cancel(request, oid):
     order.save(update_fields=['status'])
     return redirect('/products/orders')
 
-
 def order_details(request, oid):
     if request.user.is_superuser:
         return redirect('/admin/orders')

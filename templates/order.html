@@ -15,6 +15,23 @@
                 <hr class="my-4 border-light">
             </section>
 
+            <section id="products_filter">
+                <div class="row mx-5 my-2 rounded rounded-lg">
+                    <form id="advanced-filter" class="form-inline my-2 my-lg-0" action="/admin/filter">
+            
+                        <div id="filter" class="form-group bg-success text-light mx-2 p-2 rounded rounded-lg">
+                            <label for="filter" class="font-weight-bold mx-sm-2"><span class="text-dark">Filter: </span></label>
+                            <input id="filter0" class="form-control mx-sm-2" type="radio" name="filter" value=" ">None
+                            <input id="filter1" class="form-control mx-sm-2" type="radio" name="filter" value="confirmed">Confirmed
+                            <input id="filter2" class="form-control mx-sm-2" type="radio" name="filter" value="pending">Pending
+                            <input id="filter2" class="form-control mx-sm-2" type="radio" name="filter" value="cancelled">Cancelled
+                        </div>
+                        
+                        <button class="btn btn-warning m-sm-2" type="submit"><i class="fas fa-filter fa-fw"></i> Apply</button></a>
+                    </form>
+                </div>
+            </section>
+
             <section id="products_list">
                 <div class="row justify-content-center my-5">
                     <div class="col-12">
@@ -89,4 +106,28 @@
                 </div>
             </section>
         </div>
+{% endblock %}
+
+{% block script_extend %}
+        // Persistent filter status after submit
+        $('input[name="filter"]').on('change', function(){
+            localStorage.setItem('filter', this.id);
+        });
+    
+        if(localStorage.getItem("filter") !== null){
+            var id = localStorage.getItem("filter");
+            $('#'+id).prop('checked', true);
+        }
+        
+        // Remove empty field when submit
+        $("#advanced-filter").submit(function()
+        {
+            $(this).find('input[name]').filter(function ()
+                {
+                    return !this.value;
+                }).prop('disabled', true);
+
+            // ensure form still submits
+            return true; 
+        });
 {% endblock %}

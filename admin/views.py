@@ -106,6 +106,21 @@ def order_status_change(request, oid):
         return redirect('/products/orders')
     return HttpResponse("You don't have permission to view this page")
 
+def order_filter(request):
+    if request.user.is_superuser:
+        order = Orders.objects.all()
+        status = request.GET["filter"]
+        if status == 'confirmed':
+            order = order.filter(status = "Confirmed")
+        elif status == 'pending':
+            order = order.filter(status = "Pending")
+        elif status == 'cancelled':
+            order = order.filter(status = "Canceled")
+        
+        return render(request, 'order.html', {'orders': order})
+    else:
+        return HttpResponse("You don't have permission to view this page")
+
 
 def order_details(request, oid):
     order = Orders.objects.get(order_id=oid)

@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('products/add/', views.product_add, name='product_add'),
     path('products/accept_add/', views.product_accept_add, name='product_accept_add'),
+    path('filter/', views.order_filter, name='order_filter'),
 
     # Don't move these
     path('products/<str:pid>/', views.product_change, name='product_change'),
