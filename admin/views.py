@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
+from django.utils.html import escape
+
 from products.models import Product, Orders, OrderDetails
 
 # Create your views here.
@@ -111,7 +113,7 @@ def order_filter(request):
     if request.user.is_superuser:
         order = Orders.objects.all()
         if 'status' in request.GET:
-            status = request.GET["status"]
+            status = escape(request.GET["status"])
             if status == 'confirmed':
                 order = order.filter(status="Confirmed")
             elif status == 'pending':

@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Sum, Q
 from django.http import HttpResponse
+from django.utils.html import escape
+
 from .models import Product, Cart, Orders, OrderDetails
 
 # Create your views here.
@@ -18,18 +20,18 @@ def product_search(request):
     pds = Product.objects.all()
 
     if 'pname' in request.GET:
-        pname = request.GET["pname"]
+        pname = escape(request.GET["pname"])
         pds = pds.filter(product_name__icontains=pname)
 
     if 'filter' in request.GET:
-        availability = request.GET["filter"]
+        availability = escape(request.GET["filter"])
         if availability == 'avail':
             pds = pds.filter(~Q(quantity_in_stock=0))
         elif availability == 'sold-out':
             pds = pds.filter(quantity_in_stock=0)
 
     if 'sort' in request.GET:
-        sort = request.GET["sort"]
+        sort = escape(request.GET["sort"])
         if sort == 'name-a-to-z':
             pds = pds.order_by('product_name')
         elif sort == 'name-z-to-a':
@@ -141,9 +143,9 @@ def cart_checkout(request):
         total_price += item.product_id.sell_price * item.quantity
 
     if request.method == 'POST':
-        name = request.POST['name']
-        address = request.POST['address']
-        phone = request.POST['phone']
+        name = escape(request.POST['name'])
+        address = escape(request.POST['address'])
+        phone = escape(request.POST['phone'])
     else:
         name = ''
         address = ''
