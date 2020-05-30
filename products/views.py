@@ -190,10 +190,11 @@ def order_cancel(request, oid):
     order.save(update_fields=['status'])
     return redirect('/products/orders')
 
+
 def order_details(request, oid):
     if request.user.is_superuser:
         return redirect('/admin/orders')
     order = Orders.objects.get(order_id=oid)
     details = OrderDetails.objects.filter(order_id=oid).select_related('product_id')
 
-    return render(request, 'orderdetails.html', {'id': oid, 'status': order.status, 'details': details, 'total': order.total_price})
+    return render(request, 'order_details.html', {'id': oid, 'status': order.status, 'details': details, 'total': order.total_price})
