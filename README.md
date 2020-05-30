@@ -15,7 +15,7 @@
 - Pass: 123
 ### Admin cho thầy đăng nhập để quản lí:
 - Username: admin
-- Pass: admin
+- Pass: ThisIsNotAdmin
 - Sau khi đăng nhập, thầy có thể bấm vào "Welcome, Admin" để hiển thị các mục có thể quản lí
 
 ## Chức năng
