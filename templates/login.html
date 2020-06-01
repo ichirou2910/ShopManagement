@@ -1,12 +1,13 @@
-{% extends 'base/template.html' %}
+{% extends 'base/navbar.html' %}
 {% load static %}
 
-{% block title %}Login{% endblock %}
+{% block title_extend %}Login{% endblock %}
 
-{% block head %}
+{% block head_extend %}
+        <link rel="stylesheet" href="{% static 'css/login_register.css' %}">
 {% endblock %}
 
-{% block body %}
+{% block content %}
         <div class="container">
             <div class="row justify-content-center mt-5">
                 <div class="col-12 col-md-6 p-5 bg-light">
@@ -31,7 +32,6 @@
             {% if messages %}
             <div class="row justify-content-center mt-5">
                 <div class="col-12 col-md-6 p-3 border rounded-lg bg-danger">
-                    {# <p class="text-light"><i class="fas fa-info-circle"></i> message</p> #}
                     {% for message in messages %}
                         <p class="text-light"><i class="fas fa-info-circle"></i> {{message}}</p>
                     {% endfor %}
