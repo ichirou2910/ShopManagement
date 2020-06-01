@@ -190,6 +190,13 @@ def order_cancel(request, oid):
     order = Orders.objects.get(order_id=oid)
     order.status = 'Canceled'
     order.save(update_fields=['status'])
+
+    # Restore product quantity
+    details = OrderDetails.objects.filter(order_id=oid).select_related('product_id')
+    for item in details:
+        item.product_id.quantity_in_stock += item.quantity
+        item.product_id.save(update_fields=['quantity_in_stock'])
+
     return redirect('/products/orders')
 
 

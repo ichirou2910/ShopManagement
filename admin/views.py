@@ -112,17 +112,19 @@ def order_status_change(request, oid):
 def order_filter(request):
     if request.user.is_superuser:
         order = Orders.objects.all()
-        if 'status' in request.GET:
-            status = escape(request.GET["status"])
-            if status == 'confirmed':
-                order = order.filter(status="Confirmed")
-            elif status == 'pending':
-                order = order.filter(status="Pending")
-            elif status == 'cancelled':
-                order = order.filter(status="Canceled")
+    elif request.user.is_authenticated:
+        order = Orders.objects.filter(user=request.user.username)
 
-        return render(request, 'order.html', {'orders': order})
-    return HttpResponse("You don't have permission to view this page")
+    if 'status' in request.GET:
+        status = escape(request.GET["status"])
+        if status == 'confirmed':
+            order = order.filter(status="Confirmed")
+        elif status == 'pending':
+            order = order.filter(status="Pending")
+        elif status == 'cancelled':
+            order = order.filter(status="Canceled")
+
+    return render(request, 'order.html', {'orders': order})
 
 
 def order_details(request, oid):

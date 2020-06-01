@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from django.http import HttpResponse
 from django.utils.html import escape
 
 # Create your views here.
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return HttpResponse("Please log out before registering.")
     if request.method == 'POST':
         username = escape(request.POST['username'])
         email = escape(request.POST['email'])
@@ -35,6 +38,8 @@ def register(request):
 
 
 def login(request):
+    if request.user.is_authenticated:
+        return HttpResponse("You are already logged in.")
     if request.method == 'POST':
         username = escape(request.POST['username'])
         password = escape(request.POST['password'])
